@@ -1,0 +1,9 @@
+#!/bin/zsh
+#
+# This lets you quickly jump into  your home directory.
+#
+# Type:
+#
+#   h <tab>
+#
+cd "$HOME/$1"
