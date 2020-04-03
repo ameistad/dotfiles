@@ -6,7 +6,7 @@ This is my dotfiles. I orignally forked my dotfiles from the excellent [holman/d
 
 To install you just create a symlink between the zshrc.symlink and ~/.zshrc
 ```sh
-ln -s /path/to/dotfiles/zshrc.zsh ~/.zshrc
+ln -s /path/to/dotfiles/zshrc.symlink ~/.zshrc
 ```
 
 ## How it works
