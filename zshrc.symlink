@@ -51,5 +51,3 @@ autoload -U $ZSH/functions/*(:t)
 
 # added by travis gem
 [ -f /Users/andreas/.travis/travis.sh ] && source /Users/andreas/.travis/travis.sh
-# fnm
-eval "$(fnm env --multi)"
