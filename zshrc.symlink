@@ -48,6 +48,3 @@ compinit
 # Functions
 fpath=($ZSH/functions $fpath)
 autoload -U $ZSH/functions/*(:t)
-
-# added by travis gem
-[ -f /Users/andreas/.travis/travis.sh ] && source /Users/andreas/.travis/travis.sh
