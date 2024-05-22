@@ -46,51 +46,11 @@ need_push () {
   fi
 }
 
-# Virtualenv
-# displays current active virtual environment in prompt
-virtual_env() {
-  if [ -n "$VIRTUAL_ENV" ]; then
-    if [ -f "$VIRTUAL_ENV/__name__" ]; then
-        local name=`cat $VIRTUAL_ENV/__name__`
-    elif [ `basename $VIRTUAL_ENV` = "__" ]; then
-      local name=$(basename $(dirname $VIRTUAL_ENV))
-    else
-      local name=$(basename $VIRTUAL_ENV)
-    fi
-      echo "ve:%{$fg_bold[yellow]%}$name%{$reset_color%} "
-  fi
-}
-
-# Python anaconda
-# Determines prompt modifier if and when a conda environment is active
-anaconda() {
-  if [[ -n $CONDA_PREFIX ]]; then
-      if [[ $(basename $CONDA_PREFIX) == "miniconda3" ]]; then
-        # Without this, it would display conda version
-        echo "ac:%{$fg_bold[yellow]%}base%{$reset_color%} "
-      else
-        # For all environments that aren't (base)
-        echo "ac:%{$fg_bold[yellow]%}$(basename $CONDA_PREFIX)%{$reset_color%} "
-      fi
-  # When no conda environment is active, don't show anything
-  else
-    CONDA_ENV=""
-  fi
-}
-
-# Docker machine
-# displays current docker-machine in prompt
-docker_machine() {
-  if [ -n "$DOCKER_MACHINE_NAME" ]; then
-    echo "dm:%{$fg_bold[green]%}"$DOCKER_MACHINE_NAME"%{$reset_color%} "
-  fi
-}
-
 directory_name() {
   echo "%{$fg_bold[cyan]%}%3/%\/%{$reset_color%}"
 }
 
-export PROMPT=$'\n$(virtual_env)$(anaconda)$(docker_machine)$(directory_name) $(git_dirty)$(need_push)\n› '
+export PROMPT=$'\n$(directory_name) $(git_dirty)$(need_push)\n› '
 set_prompt () {
   export RPROMPT="%{$fg_bold[cyan]%}%{$reset_color%}"
 }
