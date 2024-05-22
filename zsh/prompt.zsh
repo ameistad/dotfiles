@@ -47,11 +47,11 @@ need_push () {
 }
 
 directory_name() {
-  echo "%{$fg_bold[cyan]%}%3/%\/%{$reset_color%}"
+  echo "%{$fg_bold[yellow]%}%3/%\/%{$reset_color%}"
 }
 
 user_and_host() {
-  echo "%{$fg_bold[yellow]%}%n@%m%{$reset_color%}"
+  echo "%{$fg_bold[cyan]%}%n@%m%{$reset_color%}"
 }
 
 export PROMPT=$'\n$(user_and_host) -> $(directory_name) $(git_dirty)$(need_push)\n› '
