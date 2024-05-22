@@ -4,6 +4,12 @@ This is my dotfiles. I orignally forked my dotfiles from the excellent [holman/d
 
 ## Install
 
+Create ~/.localrc and add the following:
+```sh
+# Your project folder that we can `p [tab]` to
+export PROJECTS_DIRECTORY=~/Projects
+```
+
 To install you just create a symlink between the zshrc.symlink and ~/.zshrc
 ```sh
 ln -s /path/to/dotfiles/zshrc.symlink ~/.zshrc
