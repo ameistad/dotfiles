@@ -45,8 +45,3 @@ compinit
 # Functions
 fpath=($ZSH/functions $fpath)
 autoload -U $ZSH/functions/*(:t)
-## [Completion]
-## Completion scripts setup. Remove the following line to uninstall
-[[ -f /Users/andreas/.dart-cli-completion/zsh-config.zsh ]] && . /Users/andreas/.dart-cli-completion/zsh-config.zsh || true
-## [/Completion]
-
