@@ -9,7 +9,7 @@ Create ~/.localrc and add the following:
 # Your dotfiles folder path
 export ZSH=$HOME/Projects/dotfiles
 # Your project folder that we can `p [tab]` to
-export PROJECTS_DIRECTORY=~/Projects
+export PROJECTS_DIRECTORY=$HOME/Projects
 ```
 
 To install you just create a symlink between the zshrc.symlink and ~/.zshrc
