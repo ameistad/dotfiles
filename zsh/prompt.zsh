@@ -1,86 +1,63 @@
 autoload colors && colors
 setopt PROMPT_SUBST
 
-if (( $+commands[git] ))
-then
-  git="$commands[git]"
-else
-  git="/usr/bin/git"
-fi
+git=$(command -v git || echo "/usr/bin/git")
 
-# git stuff
-git_branch() {
-  echo $($git symbolic-ref HEAD 2>/dev/null | awk -F/ {'print $NF'})
+# Define colors for readability
+declare -A colors=(
+  [reset]="%{\e[0m%}"
+  [green]="%{\e[38;2;146;156;105m%}"   # Olive green (#929c69)
+[red]="%{\e[38;2;175;91;86m%}"         # Soft red (#af5b56)
+  [yellow]="%{\e[38;2;228;194;131m%}"  # Warm yellow (#e4c283)
+  [cyan]="%{\e[38;2;0;255;255m%}"      # Cyan
+  [dark-blue]="%{\e[38;2;31;82;141m%}" # Dark blue (#1f528d)
+)
+
+git_info() {
+  local branch=$($git symbolic-ref --short HEAD 2>/dev/null)
+  [[ -z $branch ]] && return
+  local git_status=$($git status --porcelain 2>/dev/null)
+  local color=${colors[green]}
+  [[ -n $git_status ]] && color=${colors[red]}
+  echo "on \e[1m${color}${branch}${colors[reset]}"
 }
 
-git_dirty() {
-  if $(! $git status -s &> /dev/null)
-  then
-    echo ""
-  else
-    if [[ $($git status --porcelain) == "" ]]
-    then
-      echo "on %{$fg_bold[green]%}$(git_prompt_info)%{$reset_color%}"
-    else
-      echo "on %{$fg_bold[red]%}$(git_prompt_info)%{$reset_color%}"
-    fi
-  fi
-}
+# need_push() {
+#   if [[ -n $($git cherry -v @{upstream} 2>/dev/null) ]]; then
+#     echo " with %{$fg_bold[red]%}unpushed%{$reset_color%} "
+#   fi
+# }
 
-git_prompt_info () {
- ref=$($git symbolic-ref HEAD 2>/dev/null) || return
-# echo "(%{\e[0;33m%}${ref#refs/heads/}%{\e[0m%})"
- echo "${ref#refs/heads/}"
-}
-
-unpushed () {
-  $git cherry -v @{upstream} 2>/dev/null
-}
-
-need_push () {
-  if [[ $(unpushed) == "" ]]
-  then
-    echo " "
-  else
-    echo " with %{$fg_bold[red]%}unpushed%{$reset_color%} "
+need_push() {
+  if [[ -n $($git cherry -v @{upstream} 2>/dev/null) ]]; then
+    echo " with %{\e[1m%}${colors[red]}unpushed${colors[reset]} "
   fi
 }
 
 directory_name() {
-  echo "%{$fg_bold[yellow]%}%3/%\/%{$reset_color%}"
+  echo "\e[1m${colors[yellow]}%3/%\/${colors[reset]}"
 }
 
 user_and_host() {
-  echo "%{$fg_bold[cyan]%}%n@%m%{$reset_color%}"
+  echo "\e[1m${colors[dark-blue]}%n@%m${colors[reset]}"
 }
 
-export PROMPT=$'\n$(user_and_host) -> $(directory_name) $(git_dirty)$(need_push)\n› '
-set_prompt () {
-  export RPROMPT="%{$fg_bold[cyan]%}%{$reset_color%}"
+set_prompt() {
+  export PROMPT=$'\n$(user_and_host) -> $(directory_name) $(git_info)$(need_push)\n› '
+  export RPROMPT=""
 }
 
-# Sets the tab title to current directory
-precmd() {
+function title() {
+  local title_text="${1:-zsh} ${2:-%m} ${3:-%~}"
+  case $TERM in
+    screen) print -Pn "\ek${title_text}\e\\" ;;
+    xterm*|rxvt) print -Pn "\e]2;${title_text}\a" ;;
+  esac
+}
+
+function set_title_and_prompt() {
   echo -ne "\e]1;${PWD##*/}\a"
-
   title "zsh" "%m" "%55<...<%~"
   set_prompt
 }
-
-# Sets the window title nicely no matter where you are
-function title() {
-  # escape '%' chars in $1, make nonprintables visible
-  a=${(V)1//\%/\%\%}
-
-  # Truncate command, and join lines.
-  a=$(print -Pn "%40>...>$a" | tr -d "\n")
-
-  case $TERM in
-  screen)
-    print -Pn "\ek$a:$3\e\\" # screen title (in ^A")
-    ;;
-  xterm*|rxvt)
-    print -Pn "\e]2;$2\a" # plain xterm title ($3 for pwd)
-    ;;
-  esac
-}
+add-zsh-hook precmd set_title_and_prompt
