@@ -22,12 +22,6 @@ git_info() {
   echo "on \e[1m${color}${branch}${colors[reset]}"
 }
 
-# need_push() {
-#   if [[ -n $($git cherry -v @{upstream} 2>/dev/null) ]]; then
-#     echo " with %{$fg_bold[red]%}unpushed%{$reset_color%} "
-#   fi
-# }
-
 need_push() {
   if [[ -n $($git cherry -v @{upstream} 2>/dev/null) ]]; then
     echo " with %{\e[1m%}${colors[red]}unpushed${colors[reset]} "
