@@ -39,8 +39,8 @@ user_and_host() {
 }
 
 set_prompt() {
-  export PROMPT=$'\n$(user_and_host) -> $(directory_name) $(git_info)$(need_push)\n› '
-  export RPROMPT=""
+    export PROMPT=$'$(print -P "\n$(user_and_host) -> $(directory_name) $(git_info)$(need_push)\n› ")'
+    export RPROMPT=""
 }
 
 function title() {
