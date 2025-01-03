@@ -1,5 +1,7 @@
+autoload -Uz add-zsh-hook
 autoload colors && colors
 setopt PROMPT_SUBST
+
 
 git=$(command -v git || echo "/usr/bin/git")
 
