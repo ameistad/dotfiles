@@ -29,7 +29,7 @@ function need_push() {
 }
 
 function directory_name() {
-  echo "\e[1m${colors[yellow]}%3/%\/${colors[reset]}"
+  echo "\e[1m${colors[yellow]}%2~${colors[reset]}"
 }
 
 function user_and_host() {
