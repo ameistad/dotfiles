@@ -45,3 +45,6 @@ compinit
 # Functions
 fpath=($ZSH/functions $fpath)
 autoload -U $ZSH/functions/*(:t)
+
+# Added by Windsurf
+export PATH="/Users/andreas/.codeium/windsurf/bin:$PATH"
