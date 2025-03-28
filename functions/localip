@@ -1,2 +1,9 @@
- #!/bin/zsh
- ifconfig | grep "inet " | grep -Fv 127.0.0.1 | awk '{print $2}'
+#!/bin/zsh
+
+if [[ "$(uname)" == "Darwin" ]]; then
+  # macOS
+  ifconfig | grep "inet " | grep -Fv 127.0.0.1 | awk '{print $2}'
+else
+  # Linux
+  ip -4 addr show scope global | grep -oP '(?<=inet\s)\d+(\.\d+){3}' | head -n 1
+fi
