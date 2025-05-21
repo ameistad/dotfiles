@@ -6,6 +6,7 @@ This is my dotfiles. I orignally forked my dotfiles from the excellent [holman/d
 
 Create ~/.localrc and add the following:
 ```sh
+export PATH="/opt/homebrew/bin:$PATH"
 # Your dotfiles folder path
 export ZSH=$HOME/Projects/dotfiles
 # Your project folder that we can `p [tab]` to
