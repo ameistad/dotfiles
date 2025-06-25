@@ -1,2 +1,2 @@
-export GOPATH=$HOME/Projects/go
-export PATH=$PATH:$GOPATH/bin
+# For Debian/Ubuntu systems
+export PATH=/usr/local/go/bin:$PATH
