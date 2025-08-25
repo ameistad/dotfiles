@@ -1,6 +1,6 @@
 # Dotfiles!
 
-This is my dotfiles. I orignally forked my dotfiles from the excellent [holman/dotfiles](https://github.com/holman/dotfiles), but as I did more and more edits it was time I simplified it a bit. It's a bit faster too.
+Orignally forked from the excellent [holman/dotfiles](https://github.com/holman/dotfiles)
 
 ## Install
 
@@ -13,7 +13,7 @@ export ZSH=$HOME/Projects/dotfiles
 export PROJECTS_DIRECTORY=$HOME/Projects
 ```
 
-To install you just create a symlink between the zshrc.symlink and ~/.zshrc
+Create a symlink between the zshrc.symlink and ~/.zshrc
 ```sh
 ln -s /path/to/dotfiles/.zshrc ~/.zshrc
 ```
