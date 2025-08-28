@@ -1,10 +1,13 @@
-# Stash your environment variables in ~/.localrc. This means they'll stay out
-# of your main dotfiles repository (which may be public, like this one), but
-# you'll have access to them in your scripts.
+#!/usr/bin/env zsh
+
+# Load local environment variables first
 if [[ -a ~/.localrc ]]
 then
   source ~/.localrc
 fi
+
+# Auto-detect ZSH directory from this file's location
+export ZSH="${ZSH:-$(dirname "$(readlink -f "${(%):-%x}")")}"
 
 # all of our zsh files
 typeset -U config_files
