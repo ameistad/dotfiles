@@ -19,6 +19,10 @@ vim.o.undofile = true
 -- Colorscheme
 require("etterglod").setup()
 
+-- Keymaps
+require("keymaps")
+
 -- Plugins
 require("plugins.oil")
 require("plugins.telescope")
+require("plugins.treesitter")
