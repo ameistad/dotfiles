@@ -78,3 +78,12 @@ To add configuration for a new tool:
 2. Add the configuration files
 3. Update `install.sh` to create the appropriate symlinks
 4. Update this README
+
+
+## Requirements
+fzf
+ripgrep
+
+__Language servers (LSP)__
+golsp
+lua

@@ -1,9 +1,8 @@
--- Set <space> as the leader key. Load before plugins (otherwise wrong leader will be used)
+-- Set <space> as the leader key.
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
 vim.wo.relativenumber = true
-vim.opt.guifont = "Hasklig:h22"
 
 -- Sync clipboard between OS and Neovim.
 --  Schedule the setting after `UiEnter` because it can increase startup-time.
@@ -17,12 +16,21 @@ end)
 vim.o.undofile = true
 
 -- Colorscheme
-require("etterglod").setup()
+require('etterglod').setup()
 
 -- Keymaps
-require("keymaps")
+require('keymaps')
 
--- Plugins
-require("plugins.oil")
-require("plugins.telescope")
-require("plugins.treesitter")
+-- Setup lazy.nvim
+require('lazy-bootstrap')
+require('lazy').setup({
+  spec = {
+    -- import your plugins
+    { import = 'plugins' },
+  },
+  -- Configure any other settings here. See the documentation for more details.
+  -- colorscheme that will be used when installing plugins.
+  install = { colorscheme = { 'habamax' } },
+  -- automatically check for plugin updates
+  checker = { enabled = true },
+})

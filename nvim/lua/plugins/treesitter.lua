@@ -1,8 +1,6 @@
-vim.pack.add({
-  { src = "https://github.com/nvim-treesitter/nvim-treesitter" }
-})
-
-require("nvim-treesitter.configs").setup({
-	highlight = { enable = true}
-})
-
+return {
+  'nvim-treesitter/nvim-treesitter',
+  branch = 'master',
+  lazy = false,
+  build = ':TSUpdate'
+}
