@@ -10,46 +10,6 @@ Run the install script:
 ./install.sh
 ```
 
-This will:
-- Create symlinks for zsh and neovim configurations
-- Create a `.localrc` template file for your local environment variables
-- Backup any existing configurations
-
-### Manual Setup (Alternative)
-
-If you prefer to set up manually, create `~/.localrc` and add:
-
-```sh
-export PATH="/opt/homebrew/bin:$PATH"
-# Your project folder that we can `p [tab]` to
-export PROJECTS_DIRECTORY=$HOME/Projects
-```
-
-Then create symlinks:
-
-```sh
-# Zsh configuration
-ln -s /path/to/dotfiles/zsh/.zshrc ~/.zshrc
-
-# Neovim configuration
-ln -s /path/to/dotfiles/nvim ~/.config/nvim
-```
-
-## Structure
-
-```
-dotfiles/
-├── install.sh          # Setup script
-├── zsh/                # Zsh configuration
-│   ├── .zshrc         # Main zsh config file
-│   ├── config/        # Core zsh settings
-│   ├── modules/       # Topic-specific configurations
-│   └── functions/     # Custom functions
-├── nvim/              # Neovim configuration
-│   └── init.lua       # Main neovim config
-└── README.md
-```
-
 ## How it works
 
 ### Zsh Configuration
