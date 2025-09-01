@@ -164,7 +164,7 @@ function M.setup()
     ['@keyword'] = { link = 'Keyword' },
     ['@type'] = { link = 'Type' },
     ['@type.builtin'] = { fg = colors.blue, italic = true },
-    ['@type.definition'] = { fg = colors.yellow, bold = true },
+    ['@type.definition'] = { fg = colors.entity, bold = true },
     ['@variable'] = { link = 'Identifier' },
     ['@variable.builtin'] = { fg = colors.blue },
     ['@punctuation'] = { fg = colors.punctuation },
