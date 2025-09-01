@@ -33,15 +33,19 @@ link_file() {
 }
 
 # Install zsh configuration
-echo "🐚 Installing zsh configuration..."
+echo "Installing zsh configuration..."
 link_file "$DOTFILES_DIR/zsh/.zshrc" "$HOME/.zshrc"
 
 # Install neovim configuration
-echo "✏️  Installing neovim configuration..."
+echo "Installing neovim configuration..."
 link_file "$DOTFILES_DIR/nvim" "$HOME/.config/nvim"
 
+# Install ghostty
+echo "Installing ghostty configuration..."
+link_file "$DOTFILES_DIR/ghostty" "$HOME/.config/ghostty"
+
 # Install root configuration files
-echo "📄 Installing root configuration files..."
+echo "Installing root configuration files..."
 # Enable globbing for hidden files
 shopt -s dotglob
 for file in "$DOTFILES_DIR/root"/*; do
