@@ -45,5 +45,5 @@ fzf
 ripgrep
 
 __Language servers (LSP)__
-golsp
+gopls - go install golang.org/x/tools/gopls@latest
 lua
