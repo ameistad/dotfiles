@@ -164,6 +164,7 @@ function M.setup()
     ['@keyword'] = { link = 'Keyword' },
     ['@type'] = { link = 'Type' },
     ['@type.builtin'] = { fg = colors.blue, italic = true },
+    ['@type.definition'] = { fg = colors.yellow, bold = true },
     ['@variable'] = { link = 'Identifier' },
     ['@variable.builtin'] = { fg = colors.blue },
     ['@punctuation'] = { fg = colors.punctuation },
@@ -172,6 +173,8 @@ function M.setup()
     ['@tag'] = { fg = colors.blue },
     ['@tag.attribute'] = { fg = colors.func },
     ['@operator'] = { link = 'Operator' },
+    ['@field'] = { link = 'Identifier' },
+    ['@property'] = { link = 'Identifier' },
 
     -- LSP
     DiagnosticError = { fg = colors.error },
