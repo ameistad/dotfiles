@@ -1,4 +1,5 @@
-export LSCOLORS="exfxcxdxbxegedabagacad"
+# export LSCOLORS="ExGxcxdxbxegedabagacad"
+export LSCOLORS="ExGxHxdxbxegedabagacad"
 export CLICOLOR=true
 
 # History settings

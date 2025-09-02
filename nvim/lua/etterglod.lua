@@ -2,7 +2,7 @@ local M = {}
 
 local colors = {
   -- Background colors
-  bg = '#1e1e1e',
+  bg = '#171717',
   bg_alt = '#272727',
   bg_highlight = '#303030',
   bg_visual = '#676b71',
@@ -38,8 +38,11 @@ local colors = {
   orange = '#ebb579',
   yellow = '#ffee80',
   green = '#80b028',
-  blue = '#4ba6cb',
+  soft_green = '#929c69',
+  blue = '#4c80ba',
+  dark_blue = '#1f528d',
   purple = '#a177ef',
+  soft_red = '#af5b56',
 }
 
 function M.setup()
@@ -196,6 +199,8 @@ function M.setup()
   for group, opts in pairs(highlights) do
     vim.api.nvim_set_hl(0, group, opts)
   end
+
+  vim.api.nvim_set_hl(0, "Directory", { fg = colors.blue, bold = true })
 end
 
 return M
