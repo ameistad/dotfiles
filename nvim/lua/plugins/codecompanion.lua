@@ -36,7 +36,7 @@ return {
         },
         cmdline = { sources = { "cmdline" } },
         sources = {
-          default = { "lsp", "path", "buffer", "codecompanion" },
+          default = { "lsp", "path", "buffer" },
         },
       },
     },
