@@ -7,11 +7,11 @@ return {
   -- dependencies = { 'nvim-mini/mini.icons' },
   opts = {},
   keys = {
-    { '<leader>ff',  '<cmd>FzfLua files<cr>',   desc = 'Find files' },
-    { '<leader>fb', '<cmd>FzfLua buffers<cr>',    desc = 'Find buffers' },
-    { '<leader>fg', '<cmd>FzfLua live_grep<cr>',  desc = 'Live grep' },
-    { '<leader>fh', '<cmd>FzfLua help_tags<cr>',  desc = 'Help tags' },
-    { '<leader>ft', '<cmd>FzfLua tags<cr>',       desc = 'Find tags' },
-    { '<leader>fw', '<cmd>FzfLua grep_cword<cr>', desc = 'Grep current word' },
+    { '<leader>sf', '<cmd>FzfLua files<cr>',      desc = 'Find files' },
+    { '<leader>sb', '<cmd>FzfLua buffers<cr>',    desc = 'Find buffers' },
+    { '<leader>sg', '<cmd>FzfLua live_grep<cr>',  desc = 'Live grep' },
+    { '<leader>sh', '<cmd>FzfLua help_tags<cr>',  desc = 'Help tags' },
+    { '<leader>st', '<cmd>FzfLua tags<cr>',       desc = 'Find tags' },
+    { '<leader>sw', '<cmd>FzfLua grep_cword<cr>', desc = 'Grep current word' },
   },
 }
