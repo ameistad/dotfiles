@@ -2,7 +2,7 @@ local M = {}
 
 local colors = {
   -- Background colors
-  bg = '#171717',
+  bg = '#1e1e1e',
   bg_alt = '#272727',
   bg_highlight = '#303030',
   bg_visual = '#676b71',

@@ -1,19 +1,19 @@
--- Set <space> as the leader key.
-vim.g.mapleader = ' '
+vim.g.mapleader = ' '        -- Set <space> as the leader key.
 vim.g.maplocalleader = ' '
+vim.wo.number = true         -- make line numbers default
+vim.wo.relativenumber = true -- set relative line numbers
 
-vim.wo.relativenumber = true
-
--- Sync clipboard between OS and Neovim.
---  Schedule the setting after `UiEnter` because it can increase startup-time.
---  Remove this option if you want your OS clipboard to remain independent.
---  See `:help 'clipboard'`
-vim.schedule(function()
+vim.schedule(function()      -- Sync clipboard between OS and Neovim.
   vim.o.clipboard = 'unnamedplus'
 end)
-
--- Save undo history
-vim.o.undofile = true
+vim.o.wrap = false       -- displays lines as one long line
+vim.o.linebreak = true   -- companion to wrap, don't split words
+vim.o.undofile = true    -- Save undo history
+vim.o.mouse = 'a'        -- enable mouse mode, for highlights
+vim.o.autoindent = true  -- copy indent from current line when starting a new one
+vim.o.ignorecase = true  -- case-insensitive searching, unless \C or capital in search
+vim.o.smartcase = true   -- smart case
+vim.opt.showmode = false -- disable showing mode
 
 -- Colorscheme
 require('etterglod').setup()
