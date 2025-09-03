@@ -13,6 +13,9 @@ return {
           },
         },
       },
+      {
+        'saghen/blink.cmp',
+      }
     },
     config = function()
       require('lspconfig').lua_ls.setup {}
