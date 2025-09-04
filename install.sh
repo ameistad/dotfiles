@@ -44,6 +44,10 @@ link_file "$DOTFILES_DIR/nvim" "$HOME/.config/nvim"
 echo "Installing ghostty configuration..."
 link_file "$DOTFILES_DIR/ghostty" "$HOME/.config/ghostty"
 
+# Install wezterm configuration
+echo "Installing wezterm configuration..."
+link_file "$DOTFILES_DIR/wezterm/wezterm.lua" "$HOME/.config/wezterm/wezterm.lua"
+
 # Install root configuration files
 echo "Installing root configuration files..."
 # Enable globbing for hidden files
