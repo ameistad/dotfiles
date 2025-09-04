@@ -4,6 +4,24 @@ return {
     strategies = {
       chat = {
         adapter = "copilot",
+        slash_commands = {
+          ["file"] = {
+            keymaps = {
+              modes = {
+                i = "<C-f>",
+                n = { "<C-f>", "gf" },
+              },
+            },
+          },
+          ["buffer"] = {
+            keymaps = {
+              modes = {
+                i = "<C-b>",
+                n = { "<C-b>", "gb" },
+              },
+            },
+          },
+        },
       },
       inline = {
         adapter = "copilot",
