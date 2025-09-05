@@ -5,6 +5,9 @@ foreground = ffffff
 maximize = true
 window-width = 203
 window-height = 62
+clipboard-read = allow
+clipboard-write = allow
+copy-on-select = clipboard
 
 # Basic colors (0-7)
 # black
