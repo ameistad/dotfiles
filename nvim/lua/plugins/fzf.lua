@@ -9,9 +9,8 @@ return {
         .. "/vim-ignore",
     },
     grep = {
-      rg_opts = [[--column --line-number --no-heading --color=always --smart-case --hidden --glob '!.git/*' --ignore-file ]]
-        .. vim.fn.stdpath("config")
-        .. "/vim-ignore",
+      hidden = false,
+      no_ignore = false,
     },
   },
   keys = {
