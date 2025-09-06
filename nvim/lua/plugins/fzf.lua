@@ -8,6 +8,11 @@ return {
         .. vim.fn.stdpath("config")
         .. "/vim-ignore",
     },
+    grep = {
+      rg_opts = [[--column --line-number --no-heading --color=always --smart-case --hidden --glob '!.git/*' --ignore-file ]]
+        .. vim.fn.stdpath("config")
+        .. "/vim-ignore",
+    },
   },
   keys = {
     { "<leader>sf", "<cmd>FzfLua files<CR>", desc = "Search Files" },
