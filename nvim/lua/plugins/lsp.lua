@@ -184,7 +184,9 @@ return {
       local servers = {
         -- clangd = {},
         gopls = {
-          completeUnimported = true,
+          settings = {
+            completeUnimported = true,
+          },
         },
         -- pyright = {},
         -- rust_analyzer = {},
