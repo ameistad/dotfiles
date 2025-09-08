@@ -4,6 +4,10 @@ vim.keymap.set({ "n", "v" }, "<Space>", "<Nop>", { silent = true })
 -- For conciseness
 local opts = { noremap = true, silent = true }
 
+local function with_desc(opt_table, desc)
+  return vim.tbl_extend("force", opt_table, { desc = desc })
+end
+
 -- delete single character without copying into register
 vim.keymap.set("n", "x", '"_x', opts)
 
@@ -14,6 +18,9 @@ vim.keymap.set("n", "<C-u>", "<C-u>zz", opts)
 -- Find and center
 vim.keymap.set("n", "n", "nzzzv", opts)
 vim.keymap.set("n", "N", "Nzzzv", opts)
+
+-- Clear search highlighting with <leader>c
+vim.keymap.set("n", "<leader>c", ":noh<CR>", with_desc(opts, "Clear search highlighting"))
 
 -- Resize with arrows
 vim.keymap.set("n", "<Up>", ":resize -2<CR>", opts)
