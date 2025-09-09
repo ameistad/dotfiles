@@ -20,7 +20,7 @@ vim.keymap.set("n", "n", "nzzzv", opts)
 vim.keymap.set("n", "N", "Nzzzv", opts)
 
 -- Clear search highlighting with <leader>c
-vim.keymap.set("n", "<leader>c", ":noh<CR>", with_desc(opts, "Clear search highlighting"))
+vim.keymap.set("n", "<leader>c", ":noh<CR>", with_desc(opts, "[C]lear search highlighting"))
 
 -- Resize with arrows
 vim.keymap.set("n", "<Up>", ":resize -2<CR>", opts)

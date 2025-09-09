@@ -2,57 +2,57 @@ local M = {}
 
 local colors = {
   -- Background colors
-  bg = '#1e1e1e',
-  bg_alt = '#272727',
-  bg_highlight = '#303030',
-  bg_visual = '#676b71',
+  bg = "#1e1e1e",
+  bg_alt = "#272727",
+  bg_highlight = "#303030",
+  bg_visual = "#676b71",
 
   -- Foreground colors
-  fg = '#c5c8c6',
-  fg_alt = '#e9e9e9',
-  fg_dim = '#b0b0b0',
+  fg = "#c5c8c6",
+  fg_alt = "#e9e9e9",
+  fg_dim = "#b0b0b0",
 
   -- UI colors
-  border = '#3655b5',
-  cursor = '#c07020',
-  line_nr = '#949494',
-  indent_guide = '#505037',
-  indent_guide_active = '#707057',
+  border = "#3655b5",
+  cursor = "#c07020",
+  line_nr = "#949494",
+  indent_guide = "#505037",
+  indent_guide_active = "#707057",
 
   -- Syntax colors
-  comment = '#b6b4a9',
-  constant = '#bd3a3a',
-  string = '#c9c26b',
-  number = '#a077ef',
-  keyword = '#d07e22',
-  func = '#80b028',
-  type = '#4ba6cb',
-  variable = '#ececec',
-  entity = '#ffcf22',
-  punctuation = '#e1efff',
-  param = '#d07e22',
-  error = '#f44542',
-  warning = '#e58520',
+  comment = "#b6b4a9",
+  constant = "#bd3a3a",
+  string = "#c9c26b",
+  number = "#a077ef",
+  keyword = "#d07e22",
+  func = "#80b028",
+  type = "#4ba6cb",
+  variable = "#ececec",
+  entity = "#ffcf22",
+  punctuation = "#e1efff",
+  param = "#d07e22",
+  error = "#f44542",
+  warning = "#e58520",
 
   -- Additional colors
-  orange = '#ebb579',
-  yellow = '#ffee80',
-  green = '#80b028',
-  soft_green = '#929c69',
-  blue = '#4c80ba',
-  dark_blue = '#1f528d',
-  purple = '#a177ef',
-  soft_red = '#af5b56',
+  orange = "#ebb579",
+  yellow = "#ffee80",
+  green = "#80b028",
+  soft_green = "#929c69",
+  blue = "#4c80ba",
+  dark_blue = "#1f528d",
+  purple = "#a177ef",
+  soft_red = "#af5b56",
 }
 
 function M.setup()
-  vim.cmd('highlight clear')
-  if vim.fn.exists('syntax_on') then
-    vim.cmd('syntax reset')
+  vim.cmd("highlight clear")
+  if vim.fn.exists("syntax_on") then
+    vim.cmd("syntax reset")
   end
 
-  vim.g.colors_name = 'etterglod'
-  vim.o.background = 'dark'
+  vim.g.colors_name = "etterglod"
+  vim.o.background = "dark"
   vim.o.termguicolors = true
 
   local highlights = {
@@ -67,8 +67,8 @@ function M.setup()
     CursorIM = { fg = colors.bg, bg = colors.cursor },
 
     -- Line numbers
-    LineNr = { fg = colors.indent_guide },
-    CursorLineNr = { fg = colors.line_nr, bold = true },
+    --    LineNr = { fg = colors.indent_guide },
+    CursorLineNr = { fg = colors.orange, bold = true },
 
     -- Visual mode
     Visual = { bg = colors.bg_visual },
@@ -155,29 +155,29 @@ function M.setup()
     Todo = { fg = colors.warning, bold = true },
 
     -- Treesitter
-    ['@comment'] = { link = 'Comment' },
-    ['@constant'] = { link = 'Constant' },
-    ['@constant.builtin'] = { fg = colors.number },
-    ['@string'] = { link = 'String' },
-    ['@number'] = { link = 'Number' },
-    ['@boolean'] = { link = 'Boolean' },
-    ['@function'] = { link = 'Function' },
-    ['@function.builtin'] = { fg = colors.blue },
-    ['@parameter'] = { fg = colors.param, italic = true },
-    ['@keyword'] = { link = 'Keyword' },
-    ['@type'] = { link = 'Type' },
-    ['@type.builtin'] = { fg = colors.blue, italic = true },
-    ['@type.definition'] = { fg = colors.entity, bold = true },
-    ['@variable'] = { link = 'Identifier' },
-    ['@variable.builtin'] = { fg = colors.blue },
-    ['@punctuation'] = { fg = colors.punctuation },
-    ['@punctuation.delimiter'] = { fg = colors.punctuation },
-    ['@punctuation.bracket'] = { fg = colors.punctuation },
-    ['@tag'] = { fg = colors.blue },
-    ['@tag.attribute'] = { fg = colors.func },
-    ['@operator'] = { link = 'Operator' },
-    ['@field'] = { link = 'Identifier' },
-    ['@property'] = { link = 'Identifier' },
+    ["@comment"] = { link = "Comment" },
+    ["@constant"] = { link = "Constant" },
+    ["@constant.builtin"] = { fg = colors.number },
+    ["@string"] = { link = "String" },
+    ["@number"] = { link = "Number" },
+    ["@boolean"] = { link = "Boolean" },
+    ["@function"] = { link = "Function" },
+    ["@function.builtin"] = { fg = colors.blue },
+    ["@parameter"] = { fg = colors.param, italic = true },
+    ["@keyword"] = { link = "Keyword" },
+    ["@type"] = { link = "Type" },
+    ["@type.builtin"] = { fg = colors.blue, italic = true },
+    ["@type.definition"] = { fg = colors.entity, bold = true },
+    ["@variable"] = { link = "Identifier" },
+    ["@variable.builtin"] = { fg = colors.blue },
+    ["@punctuation"] = { fg = colors.punctuation },
+    ["@punctuation.delimiter"] = { fg = colors.punctuation },
+    ["@punctuation.bracket"] = { fg = colors.punctuation },
+    ["@tag"] = { fg = colors.blue },
+    ["@tag.attribute"] = { fg = colors.func },
+    ["@operator"] = { link = "Operator" },
+    ["@field"] = { link = "Identifier" },
+    ["@property"] = { link = "Identifier" },
 
     -- LSP
     DiagnosticError = { fg = colors.error },
