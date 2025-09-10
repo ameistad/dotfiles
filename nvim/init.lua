@@ -13,6 +13,12 @@ vim.g.clipboard = {
 }
 vim.wo.number = true -- make line numbers default
 vim.wo.relativenumber = true -- set relative line numbers
+vim.wo.cursorline = true
+vim.opt.cursorlineopt = "number" -- highliht only the number
+
+vim.opt.signcolumn = "yes" -- or "yes:1" on Neovim ≥0.9 to reserve exactly 1
+vim.opt.foldcolumn = "0" -- don’t auto-show fold column
+vim.opt.numberwidth = 4 -- fixed width for the number column
 
 vim.schedule(function() -- Sync clipboard between OS and Neovim.
   vim.o.clipboard = "unnamedplus"
@@ -26,9 +32,6 @@ vim.o.ignorecase = true -- case-insensitive searching, unless \C or capital in s
 vim.o.smartcase = true -- smart case
 vim.opt.showmode = false -- disable showing mode
 vim.opt.splitright = true -- split right by default
-
--- Colorscheme
-require("etterglod").setup()
 
 -- Keymaps
 require("keymaps")
@@ -44,5 +47,5 @@ require("lazy").setup({
   -- colorscheme that will be used when installing plugins.
   install = { colorscheme = { "habamax" } },
   -- automatically check for plugin updates
-  checker = { enabled = true },
+  checker = { enabled = false },
 })
