@@ -11,14 +11,14 @@ vim.g.clipboard = {
 		['*'] = require('vim.ui.clipboard.osc52').paste('*'),
 	},
 }
-vim.wo.number = true -- make line numbers default
+-- vim.wo.number = true -- make line numbers default
 vim.wo.relativenumber = true -- set relative line numbers
 vim.wo.cursorline = true
 vim.opt.cursorlineopt = 'number' -- highliht only the number
 
-vim.opt.signcolumn = 'yes' -- or "yes:1" on Neovim ≥0.9 to reserve exactly 1
-vim.opt.foldcolumn = '0' -- don’t auto-show fold column
-vim.opt.numberwidth = 4 -- fixed width for the number column
+-- vim.opt.signcolumn = 'no' -- or "yes:1" on Neovim ≥0.9 to reserve exactly 1
+--vim.opt.foldcolumn = '0' -- don’t auto-show fold column
+--vim.opt.numberwidth = 4 -- fixed width for the number column
 
 vim.schedule(function() -- Sync clipboard between OS and Neovim.
 	vim.o.clipboard = 'unnamedplus'
