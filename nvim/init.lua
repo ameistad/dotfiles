@@ -33,9 +33,6 @@ vim.o.smartcase = true -- smart case
 vim.opt.showmode = false -- disable showing mode
 vim.opt.splitright = true -- split right by default
 
--- Keymaps
-require('keymaps')
-
 -- Setup lazy.nvim
 require('lazy-bootstrap')
 require('lazy').setup({
@@ -49,3 +46,6 @@ require('lazy').setup({
 	-- automatically check for plugin updates
 	checker = { enabled = false },
 })
+
+-- Keymaps
+require('keymaps')
