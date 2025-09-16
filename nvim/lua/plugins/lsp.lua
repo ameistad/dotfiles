@@ -272,6 +272,8 @@ return {
 				'stylua', -- Used to format Lua code
 				'goimports',
 				'gofumpt',
+				'prettier',
+				'prettierd',
 			})
 			require('mason-tool-installer').setup({ ensure_installed = ensure_installed })
 
@@ -329,6 +331,7 @@ return {
 				--
 				-- You can use 'stop_after_first' to run the first available formatter from the list
 				javascript = { 'prettierd', 'prettier', stop_after_first = true },
+				html = { 'prettierd', 'prettier' },
 			},
 		},
 	},
