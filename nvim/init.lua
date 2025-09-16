@@ -1,5 +1,6 @@
 vim.g.mapleader = ' ' -- Set <space> as the leader key.
 vim.g.maplocalleader = ' '
+vim.g.have_nerd_font = false
 vim.g.clipboard = {
 	name = 'OSC 52',
 	copy = {
@@ -45,6 +46,8 @@ require('lazy').setup({
 	install = { colorscheme = { 'habamax' } },
 	-- automatically check for plugin updates
 	checker = { enabled = false },
+	-- check for changes
+	change_detection = { enabled = false },
 })
 
 -- Keymaps

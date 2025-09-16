@@ -1,4 +1,4 @@
-local wezterm = require 'wezterm'
+local wezterm = require("wezterm")
 
 wezterm.on("gui-startup", function(cmd)
   local tab, pane, window = wezterm.mux.spawn_window(cmd or {})
@@ -7,7 +7,7 @@ end)
 
 return {
   -- Font settings
-  font = wezterm.font("Hasklig"),
+  font = wezterm.font("Hasklug Nerd Font Mono"),
   font_size = 14.0,
 
   -- Window size and behavior
@@ -45,11 +45,8 @@ return {
   },
   ssh_domains = {
     {
-      -- This is the name you'll use with `wezterm connect hermes`
       name = "hermes",
-      -- The actual SSH hostname
       remote_address = "hermes",
-      -- Optional: force a specific username
       username = "andreas",
     },
   },
