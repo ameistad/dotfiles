@@ -34,8 +34,21 @@ vim.keymap.set('n', '<Right>', ':vertical resize +2<CR>', km.default_opts)
 -- Buffers
 vim.keymap.set('n', '<Tab>', ':bnext<CR>', km.default_opts)
 vim.keymap.set('n', '<S-Tab>', ':bprevious<CR>', km.default_opts)
-vim.keymap.set('n', '<leader>x', ':bdelete!<CR>', km.default_opts) -- close buffer
-vim.keymap.set('n', '<leader>b', '<cmd> enew <CR>', km.default_opts) -- new buffer
+vim.keymap.set('n', '<leader>bc', ':bdelete!<CR>', km.with_desc('Buffer [C]lose'))
+vim.keymap.set('n', '<leader>bn', '<cmd> enew <CR>', km.with_desc('Buffer [N]ew'))
+vim.keymap.set('n', '<leader>ba', function()
+	local bufs = vim.api.nvim_list_bufs()
+	local current_buf = vim.api.nvim_get_current_buf()
+	for _, i in ipairs(bufs) do
+		if i ~= current_buf then
+			-- Check if buffer is valid and loaded before attempting to delete
+			if vim.api.nvim_buf_is_valid(i) and vim.api.nvim_buf_is_loaded(i) then
+				-- Use force delete and ignore errors for special buffers
+				pcall(vim.api.nvim_buf_delete, i, { force = true })
+			end
+		end
+	end
+end, km.with_desc('Buffer Close [A]ll'))
 
 -- Window management
 vim.keymap.set('n', '<leader>v', '<C-w>v', km.with_desc('Split Window [V]ertically')) -- split window vertically
@@ -77,6 +90,3 @@ end, { desc = 'Go to next diagnostic message' })
 vim.keymap.set('n', '<leader>dw', '<cmd>FzfLua diagnostics_workspace<CR>', { desc = '[D]iagnostics [W]orkspace' })
 vim.keymap.set('n', '<leader>dm', vim.diagnostic.open_float, { desc = 'Open floating diagnostic message' })
 vim.keymap.set('n', '<leader>dl', vim.diagnostic.setloclist, { desc = 'Open diagnostics list' })
-
--- Codecompanion
--- vim.keymap.set('n', '<leader>cc', ':CodeCompanionChat<CR>', { desc = 'Open CodeCompanion Chat' })
