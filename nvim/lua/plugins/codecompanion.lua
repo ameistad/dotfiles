@@ -122,24 +122,10 @@ return {
 	},
 	keys = {
 		{
-			'<C-a>',
-			'<cmd>CodeCompanionActions<CR>',
-			desc = 'Open the action palette',
-			mode = { 'n', 'v' },
-		},
-		{
 			'<Leader>a',
 			'<cmd>CodeCompanionChat Toggle<CR>',
-			desc = 'Toggle a chat buffer',
+			desc = 'Toggle [A]I Chat',
 			mode = { 'n', 'v' },
 		},
-		{
-			'<LocalLeader>a',
-			'<cmd>CodeCompanionChat Add<CR>',
-			desc = 'Add code to a chat buffer',
-			mode = { 'v' },
-		},
-		--    { '<leader>cc', ':CodeCompanionChat<CR>',   desc = 'Open CodeCompanion Chat' },
-		--    { '<leader>ca', ':CodeCompanionAction<CR>', desc = 'Open CodeCompanion Actions' },
 	},
 }
