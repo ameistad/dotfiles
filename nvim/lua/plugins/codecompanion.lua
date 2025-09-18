@@ -72,13 +72,13 @@ return {
 						},
 					})
 				end,
-				--     anthropic = function()
-				--       return require("codecompanion.adapters").extend("anthropic", {
-				--         env = {
-				--           api_key = "cmd:op read op://development/anthropic-api-key-codecompanion/api-key --no-newline",
-				--         },
-				--       })
-				--     end,
+				anthropic = function()
+					return require('codecompanion.adapters').extend('anthropic', {
+						env = {
+							api_key = 'cmd:op read op://development/anthropic-api-key-codecompanion/api-key --no-newline',
+						},
+					})
+				end,
 			},
 		},
 		strategies = {
