@@ -90,3 +90,7 @@ end, { desc = 'Go to next diagnostic message' })
 vim.keymap.set('n', '<leader>dw', '<cmd>FzfLua diagnostics_workspace<CR>', { desc = '[D]iagnostics [W]orkspace' })
 vim.keymap.set('n', '<leader>dm', vim.diagnostic.open_float, { desc = 'Open floating diagnostic message' })
 vim.keymap.set('n', '<leader>dl', vim.diagnostic.setloclist, { desc = 'Open diagnostics list' })
+
+-- Add empty lines before and after cursor line
+vim.keymap.set('n', 'mo', '<Cmd>call append(line(\'.\') - 1, repeat([\'\'], v:count1))<CR>', km.default_opts)
+vim.keymap.set('n', 'mb', '<Cmd>call append(line(\'.\'),     repeat([\'\'], v:count1))<CR>', km.default_opts)
