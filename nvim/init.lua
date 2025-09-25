@@ -1,26 +1,9 @@
-vim.g.mapleader = ' ' -- Set <space> as the leader key.
+vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
-vim.g.have_nerd_font = false
-vim.g.clipboard = {
-	name = 'OSC 52',
-	copy = {
-		['+'] = require('vim.ui.clipboard.osc52').copy('+'),
-		['*'] = require('vim.ui.clipboard.osc52').copy('*'),
-	},
-	paste = {
-		['+'] = require('vim.ui.clipboard.osc52').paste('+'),
-		['*'] = require('vim.ui.clipboard.osc52').paste('*'),
-	},
-}
--- vim.wo.number = true -- make line numbers default
+vim.g.have_nerd_font = true
 vim.wo.relativenumber = true -- set relative line numbers
 vim.wo.cursorline = true
 vim.opt.cursorlineopt = 'number' -- highliht only the number
-
--- vim.opt.signcolumn = 'no' -- or "yes:1" on Neovim ≥0.9 to reserve exactly 1
---vim.opt.foldcolumn = '0' -- don’t auto-show fold column
---vim.opt.numberwidth = 4 -- fixed width for the number column
-
 vim.schedule(function() -- Sync clipboard between OS and Neovim.
 	vim.o.clipboard = 'unnamedplus'
 end)
