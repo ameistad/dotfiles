@@ -94,3 +94,14 @@ vim.keymap.set('n', '<leader>dl', vim.diagnostic.setloclist, { desc = 'Open diag
 -- Add empty lines before and after cursor line
 vim.keymap.set('n', 'mo', '<Cmd>call append(line(\'.\') - 1, repeat([\'\'], v:count1))<CR>', km.default_opts)
 vim.keymap.set('n', 'mb', '<Cmd>call append(line(\'.\'),     repeat([\'\'], v:count1))<CR>', km.default_opts)
+
+-- Toggle mouse on/off
+vim.keymap.set('n', '<leader>m', function()
+	if vim.o.mouse == '' then
+		vim.o.mouse = 'a'
+		print('🐭 Mouse enabled')
+	else
+		vim.o.mouse = ''
+		print('🚫 Mouse disabled')
+	end
+end, km.with_desc('Toggle mouse mode'))
