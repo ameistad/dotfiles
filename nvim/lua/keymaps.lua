@@ -92,8 +92,18 @@ vim.keymap.set('n', '<leader>dm', vim.diagnostic.open_float, { desc = 'Open floa
 vim.keymap.set('n', '<leader>dl', vim.diagnostic.setloclist, { desc = 'Open diagnostics list' })
 
 -- Add empty lines before and after cursor line
-vim.keymap.set('n', 'mo', '<Cmd>call append(line(\'.\') - 1, repeat([\'\'], v:count1))<CR>', km.default_opts)
-vim.keymap.set('n', 'mb', '<Cmd>call append(line(\'.\'),     repeat([\'\'], v:count1))<CR>', km.default_opts)
+vim.keymap.set(
+	'n',
+	'<leader>lo',
+	'<Cmd>call append(line(\'.\') - 1, repeat([\'\'], v:count1))<CR>',
+	km.with_desc('Add New [L]ine [O]ver Cursor')
+)
+vim.keymap.set(
+	'n',
+	'<leader>lb',
+	'<Cmd>call append(line(\'.\'),     repeat([\'\'], v:count1))<CR>',
+	km.with_desc('Add New [L]ine [B]elow Cursor')
+)
 
 -- Toggle mouse on/off
 vim.keymap.set('n', '<leader>m', function()
