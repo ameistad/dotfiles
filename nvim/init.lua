@@ -1,6 +1,7 @@
 vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 vim.g.have_nerd_font = true
+vim.wo.number = true
 vim.wo.relativenumber = true -- set relative line numbers
 vim.wo.cursorline = true
 vim.opt.cursorlineopt = 'number' -- highliht only the number
