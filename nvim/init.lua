@@ -19,6 +19,7 @@ vim.o.ignorecase = true -- case-insensitive searching, unless \C or capital in s
 vim.o.smartcase = true -- smart case
 vim.opt.showmode = false -- disable showing mode
 vim.opt.splitright = true -- split right by default
+vim.opt.undofile = false -- do not save undo history
 
 -- Setup lazy.nvim
 require('lazy-bootstrap')
