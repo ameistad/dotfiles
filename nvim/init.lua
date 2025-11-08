@@ -21,6 +21,34 @@ vim.opt.showmode = false -- disable showing mode
 vim.opt.splitright = true -- split right by default
 vim.opt.undofile = false -- do not save undo history
 
+-- Force Normal mode when entering a window or buffer
+vim.api.nvim_create_autocmd({ 'BufEnter', 'WinEnter' }, {
+	callback = function()
+		if vim.fn.mode() ~= 'n' then
+			vim.api.nvim_feedkeys(vim.api.nvim_replace_termcodes('<Esc>', true, false, true), 'n', true)
+		end
+	end,
+})
+
+-- no auto continue comments on new line
+vim.api.nvim_create_autocmd('FileType', {
+	group = vim.api.nvim_create_augroup('no_auto_comment', {}),
+	callback = function()
+		vim.opt_local.formatoptions:remove({ 'c', 'r', 'o' })
+	end,
+})
+
+-- auto resize splits when the terminal's window is resized
+vim.api.nvim_create_autocmd('VimResized', {
+	command = 'wincmd =',
+})
+
+-- open help in vertical split
+vim.api.nvim_create_autocmd('FileType', {
+	pattern = 'help',
+	command = 'wincmd L',
+})
+
 -- Setup lazy.nvim
 require('lazy-bootstrap')
 require('lazy').setup({
