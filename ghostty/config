@@ -1,4 +1,4 @@
-font-family = "Hasklug Nerd Font Mono"
+font-family = "Hasklug Nerd Font Mono Med"
 font-size = 15.5
 background = 1e1e1e
 foreground = ffffff
@@ -8,6 +8,8 @@ window-height = 62
 clipboard-read = allow
 clipboard-write = allow
 copy-on-select = clipboard
+
+window-padding-x = 10
 
 # Basic colors (0-7)
 # black
