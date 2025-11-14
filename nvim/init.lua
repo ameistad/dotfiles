@@ -9,7 +9,7 @@ vim.schedule(function() -- Sync clipboard between OS and Neovim.
 	vim.o.clipboard = 'unnamedplus'
 	vim.g.clipboard = 'osc52'
 end)
-vim.o.wrap = false -- displays lines as one long line
+-- vim.o.wrap = false -- displays lines as one long line
 vim.o.linebreak = true -- companion to wrap, don't split words
 vim.o.undofile = true -- Save undo history
 vim.o.mouse = 'a' -- enable mouse mode, for highlights
