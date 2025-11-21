@@ -1,5 +1,6 @@
 return {
 	'declancm/cinnamon.nvim',
+	enabled = false,
 	version = '*', -- use latest release
 	opts = {
 		keymaps = {

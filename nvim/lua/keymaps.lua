@@ -7,15 +7,17 @@ vim.keymap.set({ 'n', 'v' }, '<Space>', '<Nop>', { silent = true })
 vim.keymap.set('n', 'x', '"_x', km.default_opts)
 
 -- Vertical scroll and center
+vim.keymap.set('n', '<C-d>', '<C-d>zz', km.default_opts)
+vim.keymap.set('n', '<C-u>', '<C-u>zz', km.default_opts)
 -- use cinnamon for smooth scroll
-local cinnamon = require('cinnamon')
-cinnamon.setup()
-vim.keymap.set('n', '<C-d>', function()
-	cinnamon.scroll('<C-d>zz')
-end, km.default_opts)
-vim.keymap.set('n', '<C-u>', function()
-	cinnamon.scroll('<C-u>zz')
-end, km.default_opts)
+-- local cinnamon = require('cinnamon')
+-- cinnamon.setup()
+-- vim.keymap.set('n', '<C-d>', function()
+-- 	cinnamon.scroll('<C-d>zz')
+-- end, km.default_opts)
+-- vim.keymap.set('n', '<C-u>', function()
+-- 	cinnamon.scroll('<C-u>zz')
+-- end, km.default_opts)
 
 -- Find and center
 vim.keymap.set('n', 'n', 'nzzzv', km.default_opts)
