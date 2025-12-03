@@ -5,6 +5,7 @@ vim.wo.number = true
 vim.wo.relativenumber = true -- set relative line numbers
 vim.wo.cursorline = true
 vim.opt.cursorlineopt = 'number' -- highliht only the number
+vim.opt.signcolumn = 'yes' -- Always show the sign column to prevent text shift
 vim.schedule(function() -- Sync clipboard between OS and Neovim.
 	vim.o.clipboard = 'unnamedplus'
 	vim.g.clipboard = 'osc52'
