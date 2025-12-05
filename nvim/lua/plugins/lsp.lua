@@ -271,6 +271,7 @@ return {
 			local ensure_installed = vim.tbl_keys(servers or {})
 			vim.list_extend(ensure_installed, {
 				'astro',
+				'biome',
 				'stylua', -- Used to format Lua code
 				'goimports',
 				'gofumpt',
@@ -332,10 +333,16 @@ return {
 				-- python = { "isort", "black" },
 				--
 				-- You can use 'stop_after_first' to run the first available formatter from the list
-				javascript = { 'prettierd', 'prettier', stop_after_first = true },
-				typescript = { 'prettierd', 'prettier', stop_after_first = true },
-				typescriptreact = { 'prettierd', 'prettier', stop_after_first = true },
-				html = { 'prettierd', 'prettier' },
+				javascript = { 'biome', 'biome-organize-imports', 'prettierd', 'prettier', stop_after_first = false },
+				typescript = { 'biome', 'biome-organize-imports', 'prettierd', 'prettier', stop_after_first = false },
+				typescriptreact = {
+					'biome',
+					'biome-organize-imports',
+					'prettierd',
+					'prettier',
+					stop_after_first = false,
+				},
+				html = { 'biome', 'biome-organize-imports', 'prettierd', 'prettier' },
 			},
 		},
 	},
