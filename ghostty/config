@@ -1,5 +1,6 @@
 font-family = "Hasklug Nerd Font Mono"
 font-size = 15.5
+adjust-cell-height = 6
 background = 1e1e1e
 foreground = ffffff
 maximize = true
