@@ -56,6 +56,7 @@ return {
 		})
 	end,
 	opts = {
+		ignore_warnings = true,
 		-- display = {
 		-- 	chat = {
 		-- 		start_in_insert_mode = true,
