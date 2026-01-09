@@ -2,17 +2,28 @@ return {
 	'ibhagwan/fzf-lua',
 	dependencies = { 'nvim-tree/nvim-web-devicons' },
 	lazy = false,
-	opts = {
-		files = {
-			fd_opts = [[--color=never --type f --hidden --follow --exclude .git --ignore-file ]] .. vim.fn.stdpath(
-				'config'
-			) .. '/vim-ignore',
-		},
-		grep = {
-			hidden = false,
-			no_ignore = false,
-		},
-	},
+	opts = function()
+		local actions = require('fzf-lua').actions
+		return {
+			files = {
+				fd_opts = [[--color=never --type f --hidden --follow --exclude .git --ignore-file ]] .. vim.fn.stdpath(
+					'config'
+				) .. '/vim-ignore',
+			},
+			grep = {
+				hidden = false,
+				no_ignore = false,
+			},
+			actions = {
+				files = {
+					true,
+					['ctrl-h'] = actions.toggle_hidden,
+					['ctrl-i'] = actions.toggle_ignore,
+					['alt-h'] = false,
+				},
+			},
+		}
+	end,
 	init = function()
 		require('fzf-lua').register_ui_select()
 	end,
