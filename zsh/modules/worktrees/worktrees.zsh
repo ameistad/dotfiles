@@ -39,19 +39,36 @@ wt-ls() {
   local -a slugs=("$base"/*(/:t))
   [[ ${#slugs[@]} -eq 0 ]] && { echo "no worktrees"; return 0; }
 
-  local slug branch status
+  local slug branch state
   local -a rows=()
   for slug in "${slugs[@]}"; do
     branch=$(git -C "$base/$slug" rev-parse --abbrev-ref HEAD 2>/dev/null) || continue
     if [[ -n $(git -C "$base/$slug" status --porcelain 2>/dev/null) ]]; then
-      status="dirty"
+      state="dirty"
     else
-      status="clean"
+      state="clean"
     fi
-    rows+=("$slug	$branch	$status")
+    if [[ "$branch" == "$slug" ]]; then
+      rows+=("$slug		$state")
+    else
+      rows+=("$slug	$branch	$state")
+    fi
   done
 
   printf '%s\n' "${rows[@]}" | column -t -s $'\t'
+}
+
+wt-rm() {
+  local slug="$1"
+  [[ -z "$slug" ]] && { echo "usage: wt-rm <slug>"; return 2; }
+
+  local base dir
+  base="$(_wt_base)" || { echo "not in a git repo"; return 1; }
+  dir="$base/$slug"
+  [[ -d "$dir" ]] || { echo "worktree not found: $slug"; return 1; }
+
+  git worktree remove "$dir" || return 1
+  git worktree prune 2>/dev/null
 }
 
 wt-agent() {
