@@ -16,9 +16,9 @@ wt-init() {
 
   local envfile="$root/.env"
   if [[ -f "$envfile" ]] && grep -q '^WT_AGENT_CMD=' "$envfile"; then
-    sed -i '' "s|^WT_AGENT_CMD=.*|WT_AGENT_CMD=$cmd|" "$envfile"
+    sed -i '' "s|^WT_AGENT_CMD=.*|WT_AGENT_CMD=\"$cmd\"|" "$envfile"
   else
-    echo "WT_AGENT_CMD=$cmd" >> "$envfile"
+    echo "WT_AGENT_CMD=\"$cmd\"" >> "$envfile"
   fi
   export WT_AGENT_CMD="$cmd"
   echo "saved to $envfile"
@@ -40,12 +40,18 @@ wt-loadenv() {
   )
   [[ -n "$envname" ]] && files+=("$dir/.env.$envname")
 
-  set -a
-  local f
+  local f line key val
   for f in "${files[@]}"; do
-    [[ -f "$f" ]] && source "$f"
+    [[ -f "$f" ]] || continue
+    while IFS= read -r line || [[ -n "$line" ]]; do
+      [[ -z "$line" || "$line" == \#* ]] && continue
+      key="${line%%=*}"
+      val="${line#*=}"
+      val="${val%\"}"
+      val="${val#\"}"
+      export "$key=$val"
+    done < "$f"
   done
-  set +a
 }
 
 wt-ls() {
@@ -56,19 +62,14 @@ wt-ls() {
   local -a slugs=("$base"/*(N/:t))
   [[ ${#slugs[@]} -eq 0 ]] && { echo "no worktrees"; return 0; }
 
-  local slug branch state
+  local slug branch
   local -a rows=()
   for slug in "${slugs[@]}"; do
     branch=$(git -C "$base/$slug" rev-parse --abbrev-ref HEAD 2>/dev/null) || continue
-    if [[ -n $(git -C "$base/$slug" status --porcelain 2>/dev/null) ]]; then
-      state="dirty"
+    if [[ "$branch" != "$slug" ]]; then
+      rows+=("$slug	$branch")
     else
-      state="clean"
-    fi
-    if [[ "$branch" == "$slug" ]]; then
-      rows+=("$slug		$state")
-    else
-      rows+=("$slug	$branch	$state")
+      rows+=("$slug")
     fi
   done
 
@@ -126,11 +127,12 @@ wt-agent() {
   local slug="$1"
   [[ -z "$slug" ]] && { echo "usage: wt-agent <slug>"; return 2; }
 
-  [[ -z "$WT_AGENT_CMD" ]] && { echo "WT_AGENT_CMD not set, run wt-init first"; return 1; }
-
   local base dir root
   base="$(_wt_base)" || { echo "not in a git repo"; return 1; }
   root="$(_wt_root)" || return 1
+
+  wt-loadenv "$root"
+  [[ -z "$WT_AGENT_CMD" ]] && { echo "WT_AGENT_CMD not set, run wt-init first"; return 1; }
   dir="$base/$slug"
   if [[ ! -d "$dir" ]]; then
     echo "creating worktree: $slug"
