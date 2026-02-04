@@ -115,12 +115,42 @@ wt-merge() {
     git -C "$dir" commit -m "wt-merge: auto-commit changes from $slug" || return 1
   fi
 
-  git -C "$root" merge "$branch" || return 1
+  if git -C "$root" merge "$branch" 2>&1; then
+    git worktree remove --force "$dir" || return 1
+    git worktree prune 2>/dev/null
+    git -C "$root" branch -d "$branch" 2>/dev/null
+    echo "merged $branch and removed worktree $slug"
+    return 0
+  fi
 
-  git worktree remove --force "$dir" || return 1
-  git worktree prune 2>/dev/null
-  git -C "$root" branch -d "$branch" 2>/dev/null
-  echo "merged $branch and removed worktree $slug"
+  local conflict_files
+  conflict_files=$(git -C "$root" diff --name-only --diff-filter=U 2>/dev/null)
+  [[ -z "$conflict_files" ]] && return 1
+
+  local file_list=""
+  local file
+  while IFS= read -r file; do
+    file_list+="- $file"$'\n'
+  done <<< "$conflict_files"
+
+  echo ""
+  echo "copy this prompt into your agent to resolve:"
+  echo "---"
+  cat <<EOF
+Resolve the merge conflicts in this repository. I was merging branch '$branch' (worktree '$slug') into $(git -C "$root" rev-parse --abbrev-ref HEAD).
+
+Conflicted files:
+${file_list}
+For each file, look at the conflict markers (<<<<<<< / ======= / >>>>>>>), understand the intent of both sides, and pick the correct resolution. Remove all conflict markers when done.
+
+After resolving, stage the files with git add and run: git commit --no-edit
+
+Then clean up the worktree:
+  git worktree remove --force "$dir"
+  git worktree prune
+  git branch -d "$branch"
+EOF
+  echo "---"
 }
 
 wt-agent() {
