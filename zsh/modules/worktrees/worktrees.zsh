@@ -115,7 +115,15 @@ wt-merge() {
     git -C "$dir" commit -m "wt-merge: auto-commit changes from $slug" || return 1
   fi
 
+  local stashed=0
+  if [[ -n $(git -C "$root" status --porcelain 2>/dev/null) ]]; then
+    echo "stashing changes in main worktree..."
+    git -C "$root" stash push -m "wt-merge: auto-stash before merging $slug" || return 1
+    stashed=1
+  fi
+
   if git -C "$root" merge "$branch" 2>&1; then
+    (( stashed )) && git -C "$root" stash pop --quiet
     git worktree remove --force "$dir" || return 1
     git worktree prune 2>/dev/null
     git -C "$root" branch -d "$branch" 2>/dev/null
@@ -125,7 +133,10 @@ wt-merge() {
 
   local conflict_files
   conflict_files=$(git -C "$root" diff --name-only --diff-filter=U 2>/dev/null)
-  [[ -z "$conflict_files" ]] && return 1
+  if [[ -z "$conflict_files" ]]; then
+    (( stashed )) && git -C "$root" stash pop --quiet
+    return 1
+  fi
 
   local file_list=""
   local file
@@ -150,6 +161,7 @@ Then clean up the worktree:
   git worktree prune
   git branch -d "$branch"
 EOF
+  (( stashed )) && echo "  git stash pop  # restore stashed changes"
   echo "---"
 }
 
