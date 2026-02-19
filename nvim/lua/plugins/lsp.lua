@@ -309,6 +309,14 @@ return {
 				mode = '',
 				desc = '[F]ormat buffer',
 			},
+			{
+				'<leader>fp',
+				function()
+					require('conform').format({ formatters = { 'prettierd' } })
+				end,
+				mode = '',
+				desc = '[F]ormat with [P]rettier',
+			},
 		},
 		opts = {
 			notify_on_error = false,
