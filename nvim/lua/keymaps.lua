@@ -73,6 +73,11 @@ vim.keymap.set('n', '<leader>tp', ':tabp<CR>', km.default_opts) --  go to previo
 -- Toggle line wrapping
 vim.keymap.set('n', '<leader>lw', '<cmd>set wrap!<CR>', km.default_opts)
 
+-- Move by wrapped screen lines when using plain j/k.
+-- Keep counts on real file lines so motions like 5j and 3k still behave normally.
+vim.keymap.set('n', 'j', "v:count == 0 ? 'gj' : 'j'", km.with_desc({ expr = true }, 'Move down by screen line'))
+vim.keymap.set('n', 'k', "v:count == 0 ? 'gk' : 'k'", km.with_desc({ expr = true }, 'Move up by screen line'))
+
 -- Stay in indent mode
 vim.keymap.set('v', '<', '<gv', km.default_opts)
 vim.keymap.set('v', '>', '>gv', km.default_opts)
