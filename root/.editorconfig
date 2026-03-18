@@ -16,7 +16,6 @@ indent_size = 2
 
 [*.{md,txt}]
 trim_trailing_whitespace = false
-max_line_length = 80
 
 [*.{json,yml,yaml}]
 indent_style = space
