@@ -122,3 +122,8 @@ vim.keymap.set('n', '<leader>m', function()
 		print('🚫 Mouse disabled')
 	end
 end, km.with_desc('Toggle mouse mode'))
+
+vim.keymap.set('n', '<leader>yp', function()
+	vim.fn.setreg('+', vim.fn.expand('%:p'))
+	print(vim.fn.expand('%:p'))
+end, km.with_desc('[Y]ank File [P]ath'))
