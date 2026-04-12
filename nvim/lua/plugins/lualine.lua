@@ -11,8 +11,18 @@ return {
 
 		local filename = {
 			'filename',
-			file_status = true, -- displays file status (readonly status, modified status)
-			path = 0, -- 0 = just filename, 1 = relative path, 2 = absolute path
+			file_status = true,
+			path = 1,
+			fmt = function(str)
+				local parts = {}
+				for part in str:gmatch('[^/]+') do
+					table.insert(parts, part)
+				end
+				if #parts <= 3 then
+					return str
+				end
+				return table.concat(parts, '/', #parts - 2)
+			end,
 		}
 
 		local hide_in_width = function()
