@@ -11,11 +11,23 @@ if vim.env.SSH_TTY or vim.env.SSH_CONNECTION or vim.env.SSH_CLIENT then
 	local ok, osc52 = pcall(require, 'vim.ui.clipboard.osc52')
 
 	if ok then
+		local copy_provider = osc52.copy('+')
+		local provider_name = 'OSC 52 copy-only'
+
+		if vim.env.TMUX and vim.fn.executable('tmux') == 1 then
+			local tmux_version = vim.version.parse(vim.fn.system({ 'tmux', '-V' }))
+
+			if tmux_version and not vim.version.lt(tmux_version, { 3, 2, 0 }) then
+				copy_provider = { 'tmux', 'load-buffer', '-w', '-' }
+				provider_name = 'tmux copy-only'
+			end
+		end
+
 		vim.g.clipboard = {
-			name = 'OSC 52 copy-only',
+			name = provider_name,
 			copy = {
-				['+'] = osc52.copy('+'),
-				['*'] = osc52.copy('*'),
+				['+'] = copy_provider,
+				['*'] = copy_provider,
 			},
 			paste = {
 				['+'] = function()
@@ -26,6 +38,15 @@ if vim.env.SSH_TTY or vim.env.SSH_CONNECTION or vim.env.SSH_CLIENT then
 				end,
 			},
 		}
+
+		vim.api.nvim_create_autocmd('TextYankPost', {
+			group = vim.api.nvim_create_augroup('ssh_clipboard_yank', { clear = true }),
+			callback = function()
+				if vim.v.event.operator == 'y' and vim.v.event.regname == '' then
+					vim.fn.setreg('+', vim.v.event.regcontents, vim.v.event.regtype)
+				end
+			end,
+		})
 	end
 else
 	vim.schedule(function() -- Sync clipboard between OS and Neovim.
