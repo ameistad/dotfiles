@@ -7,10 +7,31 @@ vim.wo.relativenumber = true -- set relative line numbers
 vim.wo.cursorline = true
 vim.opt.cursorlineopt = 'number' -- highliht only the number
 vim.opt.signcolumn = 'yes' -- Always show the sign column to prevent text shift
-vim.schedule(function() -- Sync clipboard between OS and Neovim.
-	vim.o.clipboard = 'unnamedplus'
-	-- vim.g.clipboard = 'osc52'
-end)
+if vim.env.SSH_TTY or vim.env.SSH_CONNECTION or vim.env.SSH_CLIENT then
+	local ok, osc52 = pcall(require, 'vim.ui.clipboard.osc52')
+
+	if ok then
+		vim.g.clipboard = {
+			name = 'OSC 52 copy-only',
+			copy = {
+				['+'] = osc52.copy('+'),
+				['*'] = osc52.copy('*'),
+			},
+			paste = {
+				['+'] = function()
+					return {}
+				end,
+				['*'] = function()
+					return {}
+				end,
+			},
+		}
+	end
+else
+	vim.schedule(function() -- Sync clipboard between OS and Neovim.
+		vim.o.clipboard = 'unnamedplus'
+	end)
+end
 -- vim.o.wrap = false -- displays lines as one long line
 vim.o.linebreak = true -- companion to wrap, don't split words
 vim.o.undofile = true -- Save undo history

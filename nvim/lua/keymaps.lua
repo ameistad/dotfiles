@@ -85,6 +85,9 @@ vim.keymap.set('v', '>', '>gv', km.default_opts)
 -- Keep last yanked when pasting
 vim.keymap.set('v', 'p', '"_dP', km.default_opts)
 
+vim.keymap.set('x', '<leader>y', '"+y', km.with_desc('[Y]ank Selection to System Clipboard'))
+vim.keymap.set('n', '<leader>yy', '"+yy', km.with_desc('[Y]ank Line to System Clipboard'))
+
 -- Diagnostic keymaps
 vim.keymap.set('n', '[d', function()
 	vim.diagnostic.jump({ count = -1, float = true })
