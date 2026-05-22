@@ -1,5 +1,8 @@
+local is_dev = require('config.profile').is_dev()
+
 return {
 	'saghen/blink.cmp',
+	enabled = is_dev,
 	event = 'VimEnter',
 	version = '1.*',
 	dependencies = {

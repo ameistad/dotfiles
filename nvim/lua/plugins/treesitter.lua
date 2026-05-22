@@ -1,3 +1,5 @@
+local is_dev = require('config.profile').is_dev()
+
 local languages = {
 	'astro',
 	'bash',
@@ -56,6 +58,7 @@ local indent_filetypes = {
 
 return {
 	'nvim-treesitter/nvim-treesitter',
+	enabled = is_dev,
 	branch = 'main',
 	lazy = false,
 	build = function()

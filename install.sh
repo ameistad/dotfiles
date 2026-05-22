@@ -73,6 +73,9 @@ if [[ ! -f "$HOME/.localrc" ]]; then
 export PATH="/opt/homebrew/bin:$PATH"
 export PROJECTS_DIRECTORY="$HOME/Projects"
 
+# Uncomment on development machines to enable LSP, formatters, completion, and parser installs.
+# export NVIM_PROFILE=dev
+
 # Add your private environment variables here
 # export GITHUB_TOKEN="your_token_here"
 EOF

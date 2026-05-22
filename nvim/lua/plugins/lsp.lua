@@ -1,8 +1,11 @@
+local is_dev = require('config.profile').is_dev()
+
 return {
 	{
 		-- `lazydev` configures Lua LSP for your Neovim config, runtime and plugins
 		-- used for completion, annotations and signatures of Neovim apis
 		'folke/lazydev.nvim',
+		enabled = is_dev,
 		ft = 'lua',
 		opts = {
 			library = {
@@ -13,6 +16,7 @@ return {
 	},
 	{
 		'neovim/nvim-lspconfig',
+		enabled = is_dev,
 		dependencies = {
 			-- Automatically install LSPs and related tools to stdpath for Neovim
 			-- Mason must be loaded before its dependents so we need to set it up here.
@@ -298,6 +302,7 @@ return {
 	},
 	{ -- Autoformat
 		'stevearc/conform.nvim',
+		enabled = is_dev,
 		event = { 'BufWritePre' },
 		cmd = { 'ConformInfo' },
 		keys = {

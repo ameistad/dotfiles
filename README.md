@@ -93,6 +93,26 @@ git worktree remove ../.worktrees/login-fix
 
 The neovim configuration is in `nvim/init.lua` and will be symlinked to `~/.config/nvim/`.
 
+The config supports two profiles through `NVIM_PROFILE`:
+
+| Profile | How to enable | Intended use | Enabled |
+|---|---|---|---|
+| `lite` | default when `NVIM_PROFILE` is unset | Servers and config-file editing | Shared options, keymaps, theme, statusline, file picker, file browser, and basic UI plugins |
+| `dev` | `export NVIM_PROFILE=dev` | Development machines | Everything in `lite`, plus LSP, Mason-managed tools, formatters, completion/snippets, MDX support, and Treesitter parser installation |
+
+On development machines, enable the full development profile in `~/.localrc`:
+
+```sh
+export NVIM_PROFILE=dev
+```
+
+For a one-off launch without changing your shell profile:
+
+```sh
+NVIM_PROFILE=dev nvim
+NVIM_PROFILE=lite nvim
+```
+
 ## Adding New Tools
 
 To add configuration for a new tool:
@@ -104,9 +124,8 @@ To add configuration for a new tool:
 
 
 ## Requirements
-fzf
-ripgrep
+- `fzf`
+- `ripgrep`
 
-__Language servers (LSP)__
-gopls - go install golang.org/x/tools/gopls@latest
-lua
+For `NVIM_PROFILE=dev`, Neovim uses Mason to install the configured language servers,
+formatters, and related tools from `nvim/lua/plugins/lsp.lua`.
