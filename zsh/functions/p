@@ -6,4 +6,51 @@
 #
 #   p <tab>
 #
-cd "$PROJECTS_DIRECTORY/$1"
+emulate -L zsh
+
+local projects_directory=${PROJECTS_DIRECTORY:-$HOME/Projects}
+local display_directory=${projects_directory/#$HOME/\~}
+
+if (( $# > 1 )); then
+  print -u2 -- "p: expected one project path; paths containing spaces must be quoted"
+  print -u2 -- "usage: p [project/path]"
+  return 2
+fi
+
+if [[ $1 == -h || $1 == --help ]]; then
+  print -- "usage: p [project/path]"
+  print -- "Jump to a directory below $display_directory. With no path, jump to the projects directory."
+  return 0
+fi
+
+if [[ ! -d $projects_directory ]]; then
+  print -u2 -- "p: projects directory does not exist: $display_directory"
+  print -u2 -- "p: set PROJECTS_DIRECTORY to the directory containing your projects"
+  return 1
+fi
+
+if (( $# == 0 )); then
+  builtin cd -- "$projects_directory"
+  return
+fi
+
+local project_path=$1
+local destination=$projects_directory/$project_path
+
+if [[ ! -d $destination ]]; then
+  print -u2 -- "p: no directory '$project_path' under $display_directory"
+
+  # Point to the deepest valid parent so completion can take over from there.
+  local existing_parent=${project_path:h}
+  while [[ $existing_parent != . && ! -d $projects_directory/$existing_parent ]]; do
+    existing_parent=${existing_parent:h}
+  done
+
+  if [[ $existing_parent != . ]]; then
+    print -u2 -- "p: nearest existing directory: $existing_parent (try: p $existing_parent/<Tab>)"
+  fi
+
+  return 1
+fi
+
+builtin cd -- "$destination"
