@@ -199,6 +199,18 @@ vim.o.smartcase = true -- smart case
 vim.opt.showmode = false -- disable showing mode
 vim.opt.splitright = true -- split right by default
 vim.opt.undofile = false -- do not save undo history
+vim.opt.shortmess:append('I') -- hide the opening screen
+
+-- Start typing immediately when launched without a file or directory.
+vim.api.nvim_create_autocmd('VimEnter', {
+	group = vim.api.nvim_create_augroup('startup_insert', { clear = true }),
+	once = true,
+	callback = function()
+		if vim.fn.argc() == 0 and vim.bo.buftype == '' and vim.bo.modifiable then
+			vim.cmd.startinsert()
+		end
+	end,
+})
 
 -- Force Normal mode when entering a window or buffer
 vim.api.nvim_create_autocmd({ 'BufEnter', 'WinEnter' }, {
