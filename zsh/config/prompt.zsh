@@ -21,7 +21,7 @@ function git_info() {
   local git_status=$($git status --porcelain 2>/dev/null)
   local color=${colors[green]}
   [[ -n $git_status ]] && color=${colors[red]}
-  echo "on \e[1m${color}${branch}${colors[reset]}"
+  echo "on %{\e[1m%}${color}${branch}${colors[reset]}"
 }
 
 function need_push() {
@@ -31,15 +31,16 @@ function need_push() {
 }
 
 function directory_name() {
-  echo "\e[1m${colors[orange]}%2~${colors[reset]}"
+  echo "%{\e[1m%}${colors[orange]}%2~${colors[reset]}"
 }
 
 function user_and_host() {
-  echo "\e[1m${colors[dark-blue]}%n@%m${colors[reset]}"
+  echo "%{\e[1m%}${colors[dark-blue]}%n@%m${colors[reset]}"
 }
 
 function set_prompt() {
-  export PROMPT=$'$(print -P "\n$(user_and_host) -> $(directory_name) $(git_info)$(need_push)\n› ")'
+  # Let zsh expand the prompt once so %{...%} still marks nonprinting codes.
+  export PROMPT=$'\n$(user_and_host) -> $(directory_name) $(git_info)$(need_push)\n› '
   export RPROMPT=""
 }
 
