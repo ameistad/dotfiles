@@ -40,13 +40,18 @@ link_file "$DOTFILES_DIR/zsh/.zshrc" "$HOME/.zshrc"
 echo "Installing neovim configuration..."
 link_file "$DOTFILES_DIR/nvim" "$HOME/.config/nvim"
 
-# Install ghostty
-echo "Installing ghostty configuration..."
-link_file "$DOTFILES_DIR/ghostty" "$HOME/.config/ghostty"
+# Terminal emulator configs only make sense on the desktop, not on Linux servers.
+if [[ "$OSTYPE" == darwin* ]]; then
+    # Install ghostty
+    echo "Installing ghostty configuration..."
+    link_file "$DOTFILES_DIR/ghostty" "$HOME/.config/ghostty"
 
-# Install wezterm configuration
-echo "Installing wezterm configuration..."
-link_file "$DOTFILES_DIR/wezterm/wezterm.lua" "$HOME/.config/wezterm/wezterm.lua"
+    # Install wezterm configuration
+    echo "Installing wezterm configuration..."
+    link_file "$DOTFILES_DIR/wezterm/wezterm.lua" "$HOME/.config/wezterm/wezterm.lua"
+else
+    echo "⏭️  Skipping terminal emulator configs (not macOS)"
+fi
 
 # Install root configuration files
 echo "Installing root configuration files..."
@@ -70,7 +75,7 @@ if [[ ! -f "$HOME/.localrc" ]]; then
     echo "📝 Creating .localrc template..."
     cat > "$HOME/.localrc" << 'EOF'
 # Local environment variables
-export PATH="/opt/homebrew/bin:$PATH"
+[[ -d /opt/homebrew/bin ]] && export PATH="/opt/homebrew/bin:$PATH"
 export PROJECTS_DIRECTORY="$HOME/Projects"
 
 # Uncomment on development machines to enable LSP, formatters, completion, and parser installs.

@@ -1,8 +1,8 @@
 # Config directory
 export XDG_CONFIG_HOME="$HOME/.config"
 
-_EDITOR="$(command -v nvim)"
-export EDITOR="$_EDITOR"
-export VISUAL="$_EDITOR"
-export SUDO_EDITOR="$_EDITOR"
-unset _EDITOR
+if command -v nvim >/dev/null 2>&1; then
+  export EDITOR="$(command -v nvim)"
+  export VISUAL="$EDITOR"
+  export SUDO_EDITOR="$EDITOR"
+fi

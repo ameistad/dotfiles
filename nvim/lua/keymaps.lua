@@ -39,17 +39,17 @@ vim.keymap.set('n', '<S-Tab>', ':bprevious<CR>', km.default_opts)
 vim.keymap.set('n', '<leader>bc', ':bdelete!<CR>', km.with_desc('[C]lose Buffer'))
 vim.keymap.set('n', '<leader>bn', '<cmd> enew <CR>', km.with_desc('[N]ew Buffer'))
 vim.keymap.set('n', '<leader>ba', function()
-	local bufs = vim.api.nvim_list_bufs()
-	local current_buf = vim.api.nvim_get_current_buf()
-	for _, i in ipairs(bufs) do
-		if i ~= current_buf then
-			-- Check if buffer is valid and loaded before attempting to delete
-			if vim.api.nvim_buf_is_valid(i) and vim.api.nvim_buf_is_loaded(i) then
-				-- Use force delete and ignore errors for special buffers
-				pcall(vim.api.nvim_buf_delete, i, { force = true })
-			end
-		end
-	end
+  local bufs = vim.api.nvim_list_bufs()
+  local current_buf = vim.api.nvim_get_current_buf()
+  for _, i in ipairs(bufs) do
+    if i ~= current_buf then
+      -- Check if buffer is valid and loaded before attempting to delete
+      if vim.api.nvim_buf_is_valid(i) and vim.api.nvim_buf_is_loaded(i) then
+        -- Use force delete and ignore errors for special buffers
+        pcall(vim.api.nvim_buf_delete, i, { force = true })
+      end
+    end
+  end
 end, km.with_desc('Close [A]ll Other Buffers'))
 
 -- Window management
@@ -75,8 +75,8 @@ vim.keymap.set('n', '<leader>lw', '<cmd>set wrap!<CR>', km.default_opts)
 
 -- Move by wrapped screen lines when using plain j/k.
 -- Keep counts on real file lines so motions like 5j and 3k still behave normally.
-vim.keymap.set('n', 'j', "v:count == 0 ? 'gj' : 'j'", km.with_desc({ expr = true }, 'Move down by screen line'))
-vim.keymap.set('n', 'k', "v:count == 0 ? 'gk' : 'k'", km.with_desc({ expr = true }, 'Move up by screen line'))
+vim.keymap.set('n', 'j', 'v:count == 0 ? \'gj\' : \'j\'', km.with_desc({ expr = true }, 'Move down by screen line'))
+vim.keymap.set('n', 'k', 'v:count == 0 ? \'gk\' : \'k\'', km.with_desc({ expr = true }, 'Move up by screen line'))
 
 -- Stay in indent mode
 vim.keymap.set('v', '<', '<gv', km.default_opts)
@@ -90,11 +90,11 @@ vim.keymap.set('n', '<leader>yy', '"+yy', km.with_desc('[Y]ank Line to System Cl
 
 -- Diagnostic keymaps
 vim.keymap.set('n', '[d', function()
-	vim.diagnostic.jump({ count = -1, float = true })
+  vim.diagnostic.jump({ count = -1, float = true })
 end, { desc = 'Go to previous diagnostic message' })
 
 vim.keymap.set('n', ']d', function()
-	vim.diagnostic.jump({ count = 1, float = true })
+  vim.diagnostic.jump({ count = 1, float = true })
 end, { desc = 'Go to next diagnostic message' })
 
 vim.keymap.set('n', '<leader>dw', '<cmd>FzfLua diagnostics_workspace<CR>', { desc = '[D]iagnostics [W]orkspace' })
@@ -103,30 +103,30 @@ vim.keymap.set('n', '<leader>dl', vim.diagnostic.setloclist, { desc = 'Open diag
 
 -- Add empty lines before and after cursor line
 vim.keymap.set(
-	'n',
-	'<leader>lo',
-	'<Cmd>call append(line(\'.\') - 1, repeat([\'\'], v:count1))<CR>',
-	km.with_desc('Add New [L]ine [O]ver Cursor')
+  'n',
+  '<leader>lo',
+  '<Cmd>call append(line(\'.\') - 1, repeat([\'\'], v:count1))<CR>',
+  km.with_desc('Add New [L]ine [O]ver Cursor')
 )
 vim.keymap.set(
-	'n',
-	'<leader>lb',
-	'<Cmd>call append(line(\'.\'),     repeat([\'\'], v:count1))<CR>',
-	km.with_desc('Add New [L]ine [B]elow Cursor')
+  'n',
+  '<leader>lb',
+  '<Cmd>call append(line(\'.\'),     repeat([\'\'], v:count1))<CR>',
+  km.with_desc('Add New [L]ine [B]elow Cursor')
 )
 
 -- Toggle mouse on/off
 vim.keymap.set('n', '<leader>m', function()
-	if vim.o.mouse == '' then
-		vim.o.mouse = 'a'
-		print('🐭 Mouse enabled')
-	else
-		vim.o.mouse = ''
-		print('🚫 Mouse disabled')
-	end
+  if vim.o.mouse == '' then
+    vim.o.mouse = 'a'
+    print('🐭 Mouse enabled')
+  else
+    vim.o.mouse = ''
+    print('🚫 Mouse disabled')
+  end
 end, km.with_desc('Toggle mouse mode'))
 
 vim.keymap.set('n', '<leader>yp', function()
-	vim.fn.setreg('+', vim.fn.expand('%:p'))
-	print(vim.fn.expand('%:p'))
+  vim.fn.setreg('+', vim.fn.expand('%:p'))
+  print(vim.fn.expand('%:p'))
 end, km.with_desc('[Y]ank File [P]ath'))

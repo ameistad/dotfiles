@@ -1,12 +1,16 @@
 #!/usr/bin/env zsh
 
+# Dedupe PATH/fpath no matter how often files are sourced or what a parent shell exported.
+typeset -U path fpath
+
 # Load local environment variables first
 if [[ -a ~/.localrc ]]
 then
   source ~/.localrc
 fi
 
-# Auto-detect ZSH directory from this file's location
+# Auto-detect ZSH directory from this file's location.
+# `readlink -f` needs GNU coreutils or macOS >= 12.3.
 export ZSH="${ZSH:-$(dirname "$(readlink -f "${(%):-%x}")")}"
 
 # all of our zsh files
@@ -34,17 +38,24 @@ done
 unset config_files
 
 # Function paths (fpath)
-# Add each topic folder to fpath so that they can add functions and completion scripts.
-for topic_folder ($ZSH/*)
-  if [ -d $topic_folder ];
-    then  fpath=($topic_folder $fpath);
-  fi;
+# zsh/functions holds functions and their _completions; a module dir may ship its own _foo files.
+fpath=($ZSH/functions $ZSH/modules/*(N/) $fpath)
 
 # Autocomplete
-# Needs to load after adding the fpath(s).
+# Needs to load after adding the fpath(s). The dump is rebuilt at most once a day;
+# after adding a new completion run: rm ~/.cache/zsh/zcompdump*
 autoload -Uz compinit
-compinit
+() {
+  # (#q...) inside [[ ]] only works with EXTENDED_GLOB, so set it locally.
+  setopt localoptions extendedglob
+  local dump="${XDG_CACHE_HOME:-$HOME/.cache}/zsh/zcompdump-${ZSH_VERSION}"
+  [[ -d ${dump:h} ]] || mkdir -p "${dump:h}"
+  if [[ -n ${dump}(#qN.mh-24) ]]; then
+    compinit -C -d "$dump"   # dump < 24h old: skip the fpath scan and compaudit
+  else
+    compinit -d "$dump"      # full rebuild
+  fi
+}
 
 # Functions
-fpath=($ZSH/functions $fpath)
-autoload -U $ZSH/functions/*(:t)
+autoload -Uz $ZSH/functions/*(:t)

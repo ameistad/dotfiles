@@ -16,11 +16,27 @@ Run the install script:
 
 The main file is `zsh/.zshrc`. This file runs every time a new shell is created. The script automatically loads:
 
-- `*/path.zsh` - PATH modifications (loaded first)
-- `*/completion.zsh` - Completion scripts (loaded last)
-- `*/aliases.zsh` - Command aliases
-- All other `*.zsh` files in modules
-- Functions from the `functions/` directory
+1. `*/path.zsh` - PATH modifications
+2. All other `*.zsh` files under `config/` and `modules/` (aliases, exports, key bindings, prompt)
+3. `*/completion.zsh` - Completion setup and completion files (loaded last, just before `compinit`)
+4. Functions from the `functions/` directory (autoloaded)
+
+Every tool-specific module is guarded with `command -v`, so the config loads cleanly on
+machines that lack the tool. The same tree is used on macOS and Linux servers; OS
+differences are handled inside the modules, not by separate installs.
+
+### Shell behaviour
+
+- **Vi keymap**, on purpose. `Esc` enters normal mode (block cursor), `i` returns to insert
+  (beam cursor). `Ctrl-A/E/W/U/K/Y` still work in insert mode, `v` in normal mode edits the
+  line in `$EDITOR`, and Up/Down search history by prefix. See `zsh/config/keybindings.zsh`.
+- **fzf**: `Ctrl-R` history, `Ctrl-T` file/dir picker with bat/eza previews, `Alt-C` cd into a
+  directory. On macOS, if `Alt-C` types `ç` in Ghostty, set `macos-option-as-alt = true`.
+- **eza / bat**: `ls`, `ll`, `la`, `lt` use eza when installed; `cat` is bat with plain style
+  (use `command cat` for the real one); `man` pages render through bat.
+- **History** is shared between sessions, deduplicated, and 50k entries deep.
+- Completion dumps and caches live in `~/.cache/zsh/`. After adding a new completion file,
+  run `rm ~/.cache/zsh/zcompdump*` once so it gets picked up.
 
 ### Modules
 
@@ -42,13 +58,13 @@ The `zsh/modules/worktrees` module provides helpers for running coding agents in
 
 #### Directory layout
 
-Worktrees live in a `.worktrees/` directory next to (not inside) the repo:
+Worktrees live in a `.worktrees/` directory inside the repo root (`wt-agent` adds it to
+`.gitignore` the first time it creates one):
 
 ```
-~/Projects/
-  my-repo/            # main checkout
+~/Projects/my-repo/     # main checkout
   .worktrees/
-    feature-a/        # worktree created with `git worktree add`
+    feature-a/          # worktree created with `git worktree add`
     feature-b/
 ```
 
@@ -56,15 +72,19 @@ Worktrees live in a `.worktrees/` directory next to (not inside) the repo:
 
 ```sh
 cd ~/Projects/my-repo
-git worktree add ../. worktrees/feature-a -b feature-a
+git worktree add .worktrees/feature-a -b feature-a
 ```
 
 #### Functions
 
 | Function | Description |
 |---|---|
-| `wt-agent <slug>` | `cd` into the worktree matching `<slug>`, load its env files, and start the agent |
+| `wt-init` | Prompt for the agent command and persist it as `WT_AGENT_CMD` in the repo's `.env` |
+| `wt-ls` | List worktrees and their branches |
+| `wt-agent <slug>` | Create the worktree if missing, `cd` into it, load its env files, and start the agent |
 | `wt-loadenv [dir]` | Source `.env`, `.env.local`, and `.env.<env>` files from the repo root and optionally from a worktree directory |
+| `wt-merge <slug>` | Commit the worktree, merge it into the current branch, and clean up |
+| `wt-rm [--force] <slug>` | Remove a worktree; refuses if it has uncommitted changes unless `--force` |
 
 #### Environment variables
 
@@ -89,14 +109,14 @@ git worktree add ../. worktrees/feature-a -b feature-a
 ```sh
 # Create a worktree for a new feature
 cd ~/Projects/my-repo
-git worktree add ../.worktrees/login-fix -b login-fix
+git worktree add .worktrees/login-fix -b login-fix
 
 # Launch an agent in that worktree
 export WT_AGENT_CMD='claude'
 wt-agent login-fix
 
 # When done, clean up
-git worktree remove ../.worktrees/login-fix
+git worktree remove .worktrees/login-fix
 ```
 
 ### Neovim Configuration
@@ -134,8 +154,25 @@ To add configuration for a new tool:
 
 
 ## Requirements
-- `fzf`
-- `ripgrep`
+
+Only `zsh` and `git` are required. Everything else is optional and detected at runtime
+(Debian/Ubuntu package names in parentheses):
+
+- `fzf` (0.48 or newer for `fzf --zsh`; older apt versions fall back to the distro's
+  `/usr/share/doc/fzf/examples` scripts)
+- `fd` (`fd-find`, binary `fdfind`)
+- `bat` (binary `batcat` on Debian/Ubuntu)
+- `eza`
+- `ripgrep` (used by Neovim's picker)
+- `zoxide`, `lazygit`, `gh`
+- A Nerd Font on the desktop machine for Neovim and the terminal configs
+
+### Current tool versions on Linux servers
+
+The apt versions of `fzf` on older LTS releases are below 0.48. To get a current build,
+download the release tarball for your architecture from
+https://github.com/junegunn/fzf/releases and put the single `fzf` binary in `~/.local/bin`,
+which is already on `PATH`. The same works for `fd`, `bat` and `eza`.
 
 For `NVIM_PROFILE=dev`, Neovim uses Mason to install the configured language servers,
 formatters, and related tools from `nvim/lua/plugins/lsp.lua`.

@@ -15,19 +15,29 @@ declare -A colors=(
   [fg]="%{\e[38;2;197;200;198m%}"      # etterglod fg (#c5c8c6)
 )
 
-function git_info() {
-  local branch=$($git symbolic-ref --short HEAD 2>/dev/null)
+# One `git status` call yields branch, dirty state and ahead count (one fork per prompt).
+# Untracked files count as dirty. If a huge repo ever lags, add `-uno` to the status
+# call; untracked files then stop turning the branch red.
+function git_prompt_info() {
+  local line branch color dirty=0 ahead=0
+  local -a lines
+  lines=(${(f)"$($git status --porcelain=v2 --branch --ignore-submodules 2>/dev/null)"})
+  (( ${#lines} )) || return          # not a repo
+  for line in $lines; do
+    case $line in
+      '# branch.head (detached)') return ;;
+      '# branch.head '*) branch=${line#'# branch.head '} ;;
+      '# branch.ab '*)   ahead=${${line#'# branch.ab +'}%% *} ;;   # absent when no upstream
+      '#'*) ;;
+      *) dirty=1 ;;                                          # 1/2/u/? entries
+    esac
+  done
   [[ -z $branch ]] && return
-  local git_status=$($git status --porcelain 2>/dev/null)
-  local color=${colors[green]}
-  [[ -n $git_status ]] && color=${colors[red]}
-  echo "on %{\e[1m%}${color}${branch}${colors[reset]}"
-}
-
-function need_push() {
-  if [[ -n $($git cherry -v @{upstream} 2>/dev/null) ]]; then
-    echo " with %{\e[1m%}${colors[red]}unpushed${colors[reset]} "
-  fi
+  color=${colors[green]}
+  (( dirty )) && color=${colors[red]}
+  local out="on %{\e[1m%}${color}${branch}${colors[reset]}"
+  (( ahead > 0 )) && out+=" with %{\e[1m%}${colors[red]}unpushed${colors[reset]} "
+  echo "$out"
 }
 
 function directory_name() {
@@ -40,12 +50,8 @@ function user_and_host() {
 
 function set_prompt() {
   # Let zsh expand the prompt once so %{...%} still marks nonprinting codes.
-  export PROMPT=$'\n$(user_and_host) -> $(directory_name) $(git_info)$(need_push)\n› '
+  export PROMPT=$'\n$(user_and_host) -> $(directory_name) $(git_prompt_info)\n› '
   export RPROMPT=""
-}
-
-function set_beam_cursor() {
-  print -n '\e[5 q'
 }
 
 function title() {
@@ -60,7 +66,6 @@ function set_all() {
   print -n "\e]1;${PWD##*/}\a"
   title "zsh" "%m" "%55<...<%~"
   set_prompt
-  set_beam_cursor
 }
 
 add-zsh-hook precmd set_all

@@ -16,7 +16,11 @@ wt-init() {
 
   local envfile="$root/.env"
   if [[ -f "$envfile" ]] && grep -q '^WT_AGENT_CMD=' "$envfile"; then
-    sed -i '' "s|^WT_AGENT_CMD=.*|WT_AGENT_CMD=\"$cmd\"|" "$envfile"
+    # zsh-native rewrite: portable across BSD/GNU sed and safe with | or & in the command.
+    local -a lines
+    lines=("${(@f)$(<"$envfile")}")
+    lines=("${(@)lines/#WT_AGENT_CMD=*/WT_AGENT_CMD=\"$cmd\"}")
+    print -l -- "${lines[@]}" > "$envfile"
   else
     echo "WT_AGENT_CMD=\"$cmd\"" >> "$envfile"
   fi
