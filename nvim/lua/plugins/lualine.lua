@@ -47,8 +47,6 @@ return {
       cond = hide_in_width,
     }
 
-    local codecompanion_spinner = require('components.lualine.codecompanion_spinner')
-
     require('lualine').setup({
       options = {
         icons_enabled = true,
@@ -59,7 +57,7 @@ return {
       },
       sections = {
         lualine_a = { mode },
-        lualine_b = { 'branch', codecompanion_spinner },
+        lualine_b = { 'branch' },
         lualine_c = { filename },
         lualine_x = {
           diagnostics,
