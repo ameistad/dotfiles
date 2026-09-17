@@ -1,0 +1,6 @@
+# Shared directory-only completion for the jump commands.
+local jump_base_directory=$1 jump_directory_label=$2
+
+_arguments \
+  '(-h --help)'{-h,--help}'[show help]' \
+  "1:$jump_directory_label:_files -W \"\$jump_base_directory\" -/"

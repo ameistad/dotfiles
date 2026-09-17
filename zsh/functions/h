@@ -1,9 +1,3 @@
 #!/bin/zsh
-#
-# This lets you quickly jump into  your home directory.
-#
-# Type:
-#
-#   h <tab>
-#
-cd "$HOME/$1"
+# Jump to a directory relative to the home directory.
+_jump_directory h "$HOME" home '' "$@"

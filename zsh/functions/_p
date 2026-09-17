@@ -1,7 +1,3 @@
 #compdef p
 
-local projects_directory=${PROJECTS_DIRECTORY:-$HOME/Projects}
-
-_arguments \
-  '(-h --help)'{-h,--help}'[show help]' \
-  '1:project directory:_files -W "$projects_directory" -/'
+_jump_directory_completion "${PROJECTS_DIRECTORY:-$HOME/Projects}" 'project directory'

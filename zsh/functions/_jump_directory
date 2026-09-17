@@ -1,0 +1,54 @@
+#!/bin/zsh
+# Shared implementation: command, base directory, label, optional setting, args.
+emulate -L zsh
+
+local jump_command=$1 base_directory=$2 directory_label=$3 directory_setting=$4
+shift 4
+local display_directory=${base_directory/#$HOME/\~}
+local usage="usage: $jump_command [directory/path]"
+
+if (( $# > 1 )); then
+  print -u2 -- "$jump_command: expected one directory path; paths containing spaces must be quoted"
+  print -u2 -- "$usage"
+  return 2
+fi
+
+if [[ $1 == -h || $1 == --help ]]; then
+  print -- "$usage"
+  print -- "Jump to a directory below $display_directory. With no path, jump to the $directory_label directory."
+  return 0
+fi
+
+if [[ ! -d $base_directory ]]; then
+  print -u2 -- "$jump_command: $directory_label directory does not exist: $display_directory"
+  if [[ -n $directory_setting ]]; then
+    print -u2 -- "$jump_command: set $directory_setting to the directory containing your $directory_label"
+  fi
+  return 1
+fi
+
+if (( $# == 0 )); then
+  builtin cd -- "$base_directory"
+  return
+fi
+
+local directory_path=$1
+local destination=$base_directory/$directory_path
+
+if [[ ! -d $destination ]]; then
+  print -u2 -- "$jump_command: no directory '$directory_path' under $display_directory"
+
+  # Point to the deepest valid parent so completion can take over from there.
+  local existing_parent=${directory_path:h}
+  while [[ $existing_parent != . && ! -d $base_directory/$existing_parent ]]; do
+    existing_parent=${existing_parent:h}
+  done
+
+  if [[ $existing_parent != . ]]; then
+    print -u2 -- "$jump_command: nearest existing directory: $existing_parent (try: $jump_command ${(q)existing_parent}/<Tab>)"
+  fi
+
+  return 1
+fi
+
+builtin cd -- "$destination"

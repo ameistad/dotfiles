@@ -26,6 +26,16 @@ The main file is `zsh/.zshrc`. This file runs every time a new shell is created.
 
 You can organize configurations under `zsh/modules/`. For example, if you have Node.js specific aliases, create a directory `zsh/modules/node/` and add an `aliases.zsh` file there.
 
+### Directory navigation
+
+`p [directory/path]` jumps relative to `${PROJECTS_DIRECTORY:-$HOME/Projects}`;
+`h [directory/path]` jumps relative to `$HOME`. With no argument, each jumps to
+its base directory. Both share directory-only tab completion, `-h`/`--help`, and
+errors that suggest the nearest existing parent when a nested path is missing.
+Quote paths containing spaces, for example `p 'my project/src'`.
+
+Set `PROJECTS_DIRECTORY` in `~/.localrc` to use a different projects directory.
+
 ### Worktrees
 
 The `zsh/modules/worktrees` module provides helpers for running coding agents in isolated [git worktrees](https://git-scm.com/docs/git-worktree). Each worktree gives an agent its own working directory and branch so it can make changes without touching your main checkout.
