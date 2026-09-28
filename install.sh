@@ -32,6 +32,18 @@ link_file() {
     ln -s "$src" "$dest"
 }
 
+# Clean up leftovers from previous installs
+echo "🧹 Cleaning up old files..."
+# Symlinks into the dotfiles that no longer resolve (e.g. a file removed from root/)
+for link in "$HOME"/.* "$HOME"/* "$HOME/.config"/*; do
+    if [[ -L "$link" && ! -e "$link" && "$(readlink "$link")" == "$DOTFILES_DIR"/* ]]; then
+        echo "🗑️  Removing broken symlink: $link"
+        rm "$link"
+    fi
+done
+# Completion caches, so new or removed completions are picked up
+rm -rf "${XDG_CACHE_HOME:-$HOME/.cache}"/zsh/zcompdump* "${XDG_CACHE_HOME:-$HOME/.cache}/zsh/zcompcache"
+
 # Install zsh configuration
 echo "Installing zsh configuration..."
 link_file "$DOTFILES_DIR/zsh/.zshrc" "$HOME/.zshrc"
@@ -89,6 +101,21 @@ else
     echo "⏭️  Skipping .localrc - file already exists"
 fi
 
+# Sync neovim plugins to the lockfile and remove plugins no longer in the config
+if command -v nvim > /dev/null; then
+    echo "🔌 Syncing neovim plugins..."
+    nvim --headless "+Lazy! restore" "+Lazy! clean" +qa > /dev/null 2>&1 \
+        || echo "⚠️  Neovim plugin sync failed, run :Lazy in neovim to check"
+fi
+
 echo "✅ Dotfiles setup complete!"
-echo "🔄 Please restart your terminal or run: source ~/.zshrc"
 echo "📝 Neovim config installed to ~/.config/nvim"
+
+# A script can't reload the shell that ran it, so replace this process with a fresh zsh.
+# Exiting that zsh drops back to the old shell, so open a new terminal if you want it gone.
+if [[ -t 0 && -t 1 ]] && command -v zsh > /dev/null; then
+    echo "🔄 Starting a fresh zsh with the new config..."
+    exec zsh -l
+else
+    echo "🔄 Please restart your terminal or run: exec zsh"
+fi
