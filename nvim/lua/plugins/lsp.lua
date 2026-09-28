@@ -1,5 +1,14 @@
 local is_dev = require('config.profile').is_dev()
 
+-- One formatter chain per project, never both: biome when the project is configured for it,
+-- otherwise prettierd (prettier as fallback). Running both makes the last one win.
+local function web_formatters(bufnr)
+  if vim.fs.root(bufnr, { 'biome.json', 'biome.jsonc' }) then
+    return { 'biome', 'biome-organize-imports' }
+  end
+  return { 'prettierd', 'prettier', stop_after_first = true }
+end
+
 return {
   {
     -- `lazydev` configures Lua LSP for your Neovim config, runtime and plugins
@@ -17,6 +26,7 @@ return {
   {
     'neovim/nvim-lspconfig',
     enabled = is_dev,
+    event = { 'BufReadPre', 'BufNewFile' },
     dependencies = {
       -- Automatically install LSPs and related tools to stdpath for Neovim
       -- Mason must be loaded before its dependents so we need to set it up here.
@@ -83,20 +93,6 @@ return {
           --  the definition of its *type*, not where it was *defined*.
           map('grt', require('fzf-lua').lsp_typedefs, '[G]oto [T]ype Definition')
 
-          -- This function resolves a difference between neovim nightly (version 0.11) and stable (version 0.10)
-          ---@param client vim.lsp.Client
-          ---@param method vim.lsp.protocol.Method
-          ---@param bufnr? integer some lsp support methods only in specific files
-          ---@return boolean
-          local function client_supports_method(client, method, bufnr)
-            if vim.fn.has('nvim-0.11') == 1 then
-              return client:supports_method(method, bufnr)
-            else
-              ---@diagnostic disable-next-line:param-type-mismatch
-              return client.supports_method(method, { bufnr = bufnr })
-            end
-          end
-
           -- The following two autocommands are used to highlight references of the
           -- word under your cursor when your cursor rests there for a little while.
           --    See `:help CursorHold` for information about when this is executed
@@ -110,10 +106,7 @@ return {
             })
           end
 
-          if
-            client
-            and client_supports_method(client, vim.lsp.protocol.Methods.textDocument_documentHighlight, event.buf)
-          then
+          if client and client:supports_method(vim.lsp.protocol.Methods.textDocument_documentHighlight, event.buf) then
             local highlight_augroup = vim.api.nvim_create_augroup('lsp-highlight', { clear = false })
             vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
               buffer = event.buf,
@@ -140,7 +133,7 @@ return {
           -- code, if the language server you are using supports them
           --
           -- This may be unwanted, since they displace some of your code
-          if client and client_supports_method(client, vim.lsp.protocol.Methods.textDocument_inlayHint, event.buf) then
+          if client and client:supports_method(vim.lsp.protocol.Methods.textDocument_inlayHint, event.buf) then
             map('<leader>th', function()
               vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled({ bufnr = event.buf }))
             end, '[T]oggle Inlay [H]ints')
@@ -165,25 +158,11 @@ return {
         virtual_text = {
           source = 'if_many',
           spacing = 2,
-          format = function(diagnostic)
-            local diagnostic_message = {
-              [vim.diagnostic.severity.ERROR] = diagnostic.message,
-              [vim.diagnostic.severity.WARN] = diagnostic.message,
-              [vim.diagnostic.severity.INFO] = diagnostic.message,
-              [vim.diagnostic.severity.HINT] = diagnostic.message,
-            }
-            return diagnostic_message[diagnostic.severity]
-          end,
         },
       })
 
-      -- LSP servers and clients are able to communicate to each other what features they support.
-      --  By default, Neovim doesn't support everything that is in the LSP specification.
-      --  When you add blink.cmp, luasnip, etc. Neovim now has *more* capabilities.
-      --  So, we create new capabilities with blink.cmp, and then broadcast that to the servers.
-      local capabilities = require('blink.cmp').get_lsp_capabilities()
-
-      -- Enable the following language servers
+      -- Enable the following language servers.
+      -- blink.cmp adds its completion capabilities to every server on its own (nvim 0.11+).
       --  Feel free to add/remove any LSPs that you want here. They will automatically be installed.
       --
       --  Add any additional override configuration in the following tables. Available keys are:
@@ -284,19 +263,14 @@ return {
       })
       require('mason-tool-installer').setup({ ensure_installed = ensure_installed })
 
+      -- Merge our overrides into nvim-lspconfig's defaults. mason-lspconfig v2 then calls
+      -- vim.lsp.enable() for every installed server (automatic_enable), which picks these up.
+      for server_name, server in pairs(servers) do
+        vim.lsp.config(server_name, server)
+      end
+
       require('mason-lspconfig').setup({
-        ensure_installed = {}, -- explicitly set to an empty table (Kickstart populates installs via mason-tool-installer)
-        automatic_installation = false,
-        handlers = {
-          function(server_name)
-            local server = servers[server_name] or {}
-            -- This handles overriding only values explicitly passed
-            -- by the server configuration above. Useful when disabling
-            -- certain features of an LSP (for example, turning off formatting for ts_ls)
-            server.capabilities = vim.tbl_deep_extend('force', {}, capabilities, server.capabilities or {})
-            require('lspconfig')[server_name].setup(server)
-          end,
-        },
+        ensure_installed = {}, -- installs go through mason-tool-installer above
       })
     end,
   },
@@ -315,12 +289,13 @@ return {
         desc = '[F]ormat buffer',
       },
       {
-        '<leader>fp',
+        -- Not <leader>fp: that would make <leader>f wait for a second key on every format.
+        '<leader>cp',
         function()
           require('conform').format({ formatters = { 'prettierd' } })
         end,
         mode = '',
-        desc = '[F]ormat with [P]rettier',
+        desc = '[C]ode format with [P]rettier',
       },
     },
     opts = {
@@ -346,16 +321,12 @@ return {
         -- python = { "isort", "black" },
         --
         -- You can use 'stop_after_first' to run the first available formatter from the list
-        javascript = { 'biome', 'biome-organize-imports', 'prettierd', 'prettier', stop_after_first = false },
-        typescript = { 'biome', 'biome-organize-imports', 'prettierd', 'prettier', stop_after_first = false },
-        typescriptreact = {
-          'biome',
-          'biome-organize-imports',
-          'prettierd',
-          'prettier',
-          stop_after_first = false,
-        },
-        html = { 'biome', 'biome-organize-imports', 'prettierd', 'prettier' },
+        javascript = web_formatters,
+        javascriptreact = web_formatters,
+        typescript = web_formatters,
+        typescriptreact = web_formatters,
+        html = web_formatters,
+        css = web_formatters,
       },
     },
   },

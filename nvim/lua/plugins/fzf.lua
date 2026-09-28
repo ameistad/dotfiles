@@ -1,7 +1,7 @@
 return {
   'ibhagwan/fzf-lua',
   dependencies = { 'nvim-tree/nvim-web-devicons' },
-  lazy = false,
+  cmd = 'FzfLua',
   opts = function()
     local actions = require('fzf-lua').actions
     return {
@@ -25,7 +25,17 @@ return {
     }
   end,
   init = function()
-    require('fzf-lua').register_ui_select()
+    -- Route vim.ui.select through fzf-lua, loading it on first use instead of at startup.
+    local builtin_select = vim.ui.select
+    local lazy_select
+    lazy_select = function(...)
+      require('fzf-lua').register_ui_select()
+      if vim.ui.select == lazy_select then -- registration failed; don't recurse
+        vim.ui.select = builtin_select
+      end
+      return vim.ui.select(...)
+    end
+    vim.ui.select = lazy_select
   end,
   keys = {
     { '<leader>sf', '<cmd>FzfLua files<CR>', desc = 'Search Files' },

@@ -37,6 +37,9 @@ differences are handled inside the modules, not by separate installs.
 - **History** is shared between sessions, deduplicated, and 50k entries deep.
 - Completion dumps and caches live in `~/.cache/zsh/`. After adding a new completion file,
   run `rm ~/.cache/zsh/zcompdump*` once so it gets picked up.
+- `fzf --zsh` and `zoxide init zsh` output is cached in `~/.cache/zsh/init-*.zsh` and
+  regenerated when the binary changes (see `zsh/config/init-cache.zsh`). Delete the file to
+  force a refresh, for example after changing `_ZO_*` settings.
 
 ### Modules
 
@@ -142,6 +145,10 @@ For a one-off launch without changing your shell profile:
 NVIM_PROFILE=dev nvim
 NVIM_PROFILE=lite nvim
 ```
+
+Formatting (dev profile) runs on save. JS/TS/HTML/CSS use biome when the project has a
+`biome.json`/`biome.jsonc`, otherwise prettierd (falling back to prettier), never both.
+`<leader>f` formats the buffer, `<leader>cp` forces prettierd.
 
 ## Adding New Tools
 

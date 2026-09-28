@@ -4,8 +4,8 @@
 # bind `main`, which is viins by now. Either way ^R replaces vi's redisplay/redo.
 command -v fzf >/dev/null 2>&1 || return 0
 
-if fzf --zsh >/dev/null 2>&1; then                                  # fzf >= 0.48
-  eval "$(fzf --zsh)"
+if _init_cache fzf fzf --zsh; then                                  # fzf >= 0.48, cached
+  source $REPLY
 elif [[ -r /usr/share/doc/fzf/examples/key-bindings.zsh ]]; then    # Debian/Ubuntu apt fzf
   source /usr/share/doc/fzf/examples/key-bindings.zsh
   [[ -r /usr/share/doc/fzf/examples/completion.zsh ]] && source /usr/share/doc/fzf/examples/completion.zsh

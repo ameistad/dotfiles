@@ -2,7 +2,7 @@ autoload -Uz add-zsh-hook
 autoload colors && colors
 setopt PROMPT_SUBST
 
-git=$(command -v git || echo "/usr/bin/git")
+_prompt_git=$(command -v git || echo "/usr/bin/git")
 
 declare -A colors=(
   [reset]="%{\e[0m%}"
@@ -21,7 +21,7 @@ declare -A colors=(
 function git_prompt_info() {
   local line branch color dirty=0 ahead=0
   local -a lines
-  lines=(${(f)"$($git status --porcelain=v2 --branch --ignore-submodules 2>/dev/null)"})
+  lines=(${(f)"$($_prompt_git status --porcelain=v2 --branch --ignore-submodules 2>/dev/null)"})
   (( ${#lines} )) || return          # not a repo
   for line in $lines; do
     case $line in
@@ -48,16 +48,15 @@ function user_and_host() {
   echo "%{\e[1m%}${colors[dark-blue]}%n@%m${colors[reset]}"
 }
 
-function set_prompt() {
-  # Let zsh expand the prompt once so %{...%} still marks nonprinting codes.
-  export PROMPT=$'\n$(user_and_host) -> $(directory_name) $(git_prompt_info)\n› '
-  export RPROMPT=""
-}
+# Set once: PROMPT_SUBST re-runs the $(...) parts on every prompt, so %{...%} still marks
+# nonprinting codes and the git info stays current.
+PROMPT=$'\n$(user_and_host) -> $(directory_name) $(git_prompt_info)\n› '
+RPROMPT=""
 
 function title() {
   local title_text="${1:-zsh} ${2:-%m} ${3:-%~}"
   case $TERM in
-    screen) print -Pn "\ek${title_text}\e\\" ;;
+    screen*|tmux*) print -Pn "\ek${title_text}\e\\" ;;
     xterm*|rxvt) print -Pn "\e]2;${title_text}\a" ;;
   esac
 }
@@ -65,7 +64,6 @@ function title() {
 function set_all() {
   print -n "\e]1;${PWD##*/}\a"
   title "zsh" "%m" "%55<...<%~"
-  set_prompt
 }
 
 add-zsh-hook precmd set_all

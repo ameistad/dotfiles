@@ -1,27 +1,20 @@
-local local_path = vim.fn.expand('~/Projects/etterglod.nvim')
-local use_local = vim.fn.isdirectory(local_path) == 1
+-- Use a local checkout of the colorscheme when there is one (for developing it), else GitHub.
+local projects = vim.env.PROJECTS_DIRECTORY or vim.fn.expand('~/Projects')
+local local_path = vim.fs.joinpath(vim.fn.expand(projects), 'etterglod.nvim')
 
-local plugin
+local plugin = {
+  lazy = false,
+  priority = 1000,
+  config = function()
+    vim.cmd('colorscheme etterglod')
+  end,
+}
 
-if use_local then
-  plugin = {
-    dir = local_path,
-    name = 'etterglod',
-    lazy = false,
-    priority = 1000,
-    config = function()
-      vim.cmd('colorscheme etterglod')
-    end,
-  }
+if vim.fn.isdirectory(local_path) == 1 then
+  plugin.dir = local_path
+  plugin.name = 'etterglod'
 else
-  plugin = {
-    'ameistad/etterglod.nvim',
-    lazy = false,
-    priority = 1000,
-    config = function()
-      vim.cmd('colorscheme etterglod')
-    end,
-  }
+  plugin[1] = 'ameistad/etterglod.nvim'
 end
 
 return plugin

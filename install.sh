@@ -15,16 +15,18 @@ link_file() {
     # Create parent directory if it doesn't exist
     mkdir -p "$(dirname "$dest")"
 
-    # Remove existing file/symlink
+    # Remove existing symlink, back up anything else. Timestamped so an earlier backup
+    # is never overwritten (or, for directories, nested inside).
+    local backup="$dest.backup.$(date +%Y%m%d%H%M%S)"
     if [[ -L "$dest" ]]; then
         echo "🔗 Removing existing symlink: $dest"
         rm "$dest"
     elif [[ -f "$dest" ]]; then
-        echo "📦 Backing up existing file: $dest -> $dest.backup"
-        mv "$dest" "$dest.backup"
+        echo "📦 Backing up existing file: $dest -> $backup"
+        mv "$dest" "$backup"
     elif [[ -d "$dest" ]]; then
-        echo "📦 Backing up existing directory: $dest -> $dest.backup"
-        mv "$dest" "$dest.backup"
+        echo "📦 Backing up existing directory: $dest -> $backup"
+        mv "$dest" "$backup"
     fi
 
     # Create symlink

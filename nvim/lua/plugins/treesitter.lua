@@ -68,42 +68,25 @@ return {
     treesitter.update(languages):wait(300000)
   end,
   config = function()
-    local ok, treesitter = pcall(require, 'nvim-treesitter')
-    if ok and type(treesitter.install) == 'function' then
-      treesitter.setup()
+    require('nvim-treesitter').setup()
 
-      vim.api.nvim_create_autocmd('FileType', {
-        group = vim.api.nvim_create_augroup('treesitter_start', { clear = true }),
-        pattern = filetypes,
-        callback = function(args)
-          pcall(vim.treesitter.start, args.buf)
-          if args.match == 'astro' then
-            vim.bo[args.buf].syntax = 'ON'
-          end
-        end,
-      })
+    vim.api.nvim_create_autocmd('FileType', {
+      group = vim.api.nvim_create_augroup('treesitter_start', { clear = true }),
+      pattern = filetypes,
+      callback = function(args)
+        pcall(vim.treesitter.start, args.buf)
+        if args.match == 'astro' then
+          vim.bo[args.buf].syntax = 'ON'
+        end
+      end,
+    })
 
-      vim.api.nvim_create_autocmd('FileType', {
-        group = vim.api.nvim_create_augroup('treesitter_indent', { clear = true }),
-        pattern = indent_filetypes,
-        callback = function(args)
-          vim.bo[args.buf].indentexpr = 'v:lua.require\'nvim-treesitter\'.indentexpr()'
-        end,
-      })
-
-      return
-    end
-
-    require('nvim-treesitter.configs').setup({
-      auto_install = false,
-      sync_install = false,
-      ignore_install = {},
-      ensure_installed = {},
-      highlight = {
-        enable = true,
-        additional_vim_regex_highlighting = { 'astro' },
-      },
-      indent = { enable = true },
+    vim.api.nvim_create_autocmd('FileType', {
+      group = vim.api.nvim_create_augroup('treesitter_indent', { clear = true }),
+      pattern = indent_filetypes,
+      callback = function(args)
+        vim.bo[args.buf].indentexpr = 'v:lua.require\'nvim-treesitter\'.indentexpr()'
+      end,
     })
   end,
 }
