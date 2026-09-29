@@ -113,11 +113,6 @@ fi
 echo "✅ Dotfiles setup complete!"
 echo "📝 Neovim config installed to ~/.config/nvim"
 
-# A script can't reload the shell that ran it, so replace this process with a fresh zsh.
-# Exiting that zsh drops back to the old shell, so open a new terminal if you want it gone.
-if [[ -t 0 && -t 1 ]] && command -v zsh > /dev/null; then
-    echo "🔄 Starting a fresh zsh with the new config..."
-    exec zsh -l
-else
-    echo "🔄 Please restart your terminal or run: exec zsh"
-fi
+# The installer can't replace its parent shell. Let the user reload it directly
+# so installation doesn't leave an extra shell to exit before disconnecting SSH.
+echo "🔄 To load the new config, run: exec zsh -l"
