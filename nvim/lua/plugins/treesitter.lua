@@ -58,7 +58,7 @@ local indent_filetypes = {
 
 return {
   'nvim-treesitter/nvim-treesitter',
-  enabled = is_dev,
+  cond = is_dev,
   branch = 'main',
   lazy = false,
   build = function()

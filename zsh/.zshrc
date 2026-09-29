@@ -9,9 +9,10 @@ then
   source ~/.localrc
 fi
 
-# Auto-detect ZSH directory from this file's location.
+# Always derive ZSH from this file's location. Don't trust an inherited value: an old
+# shell, ~/.localrc or another framework may have exported ZSH pointing somewhere else.
 # `readlink -f` needs GNU coreutils or macOS >= 12.3.
-export ZSH="${ZSH:-$(dirname "$(readlink -f "${(%):-%x}")")}"
+export ZSH="$(dirname "$(readlink -f "${(%):-%x}")")"
 
 # all of our zsh files
 typeset -U config_files
@@ -58,4 +59,4 @@ autoload -Uz compinit
 }
 
 # Functions
-autoload -Uz $ZSH/functions/*(:t)
+autoload -Uz $ZSH/functions/*(N:t)

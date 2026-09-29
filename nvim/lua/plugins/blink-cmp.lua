@@ -2,7 +2,7 @@ local is_dev = require('config.profile').is_dev()
 
 return {
   'saghen/blink.cmp',
-  enabled = is_dev,
+  cond = is_dev,
   event = 'InsertEnter',
   version = '1.*',
   dependencies = {

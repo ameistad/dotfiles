@@ -14,7 +14,7 @@ return {
     -- `lazydev` configures Lua LSP for your Neovim config, runtime and plugins
     -- used for completion, annotations and signatures of Neovim apis
     'folke/lazydev.nvim',
-    enabled = is_dev,
+    cond = is_dev,
     ft = 'lua',
     opts = {
       library = {
@@ -25,7 +25,7 @@ return {
   },
   {
     'neovim/nvim-lspconfig',
-    enabled = is_dev,
+    cond = is_dev,
     event = { 'BufReadPre', 'BufNewFile' },
     dependencies = {
       -- Automatically install LSPs and related tools to stdpath for Neovim
@@ -276,7 +276,7 @@ return {
   },
   { -- Autoformat
     'stevearc/conform.nvim',
-    enabled = is_dev,
+    cond = is_dev,
     event = { 'BufWritePre' },
     cmd = { 'ConformInfo' },
     keys = {
