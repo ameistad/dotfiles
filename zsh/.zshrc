@@ -60,3 +60,13 @@ autoload -Uz compinit
 
 # Functions
 autoload -Uz $ZSH/functions/*(N:t)
+
+# Command-line highlighting (brew/apt: zsh-syntax-highlighting). Must be sourced last, after
+# compinit and every widget (vi keys, fzf). Colors: modules/zsh-syntax-highlighting/styles.zsh.
+for _zsh_hl in \
+  {${HOMEBREW_PREFIX:-/opt/homebrew},/usr/local}/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh \
+  /usr/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+do
+  [[ -r $_zsh_hl ]] && { source $_zsh_hl; break }
+done
+unset _zsh_hl

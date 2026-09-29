@@ -24,7 +24,7 @@ return {
     background = "#1e1e1e",
     ansi = {
       "#1e1e1e", -- black
-      "#ffffff", -- red
+      "#af5b56", -- red (soft red)
       "#80b028", -- green
       "#ffee80", -- yellow
       "#4c80ba", -- blue
@@ -34,7 +34,7 @@ return {
     },
     brights = {
       "#676b71", -- bright black (gray)
-      "#af5b56", -- bright red
+      "#f44542", -- bright red (error)
       "#80b028", -- bright green
       "#ebb579", -- bright yellow (orange)
       "#3655b5", -- bright blue

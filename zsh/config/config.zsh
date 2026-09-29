@@ -26,11 +26,11 @@ setopt HIST_EXPIRE_DUPS_FIRST
 
 # ---------- Colors ----------
 export CLICOLOR=true
-export LSCOLORS="ExGxHxdxbxegedabagacad"           # BSD ls (macOS)
+export LSCOLORS="ExGxHxdxHxegedabagacad"           # BSD ls (macOS). Executables bold white.
 # GNU-style LS_COLORS for completion list-colors, eza, fd, GNU ls.
 if [[ -z $LS_COLORS ]]; then
   # Linux coreutils. dircolors emits an empty value when TERM is unknown (e.g. dumb).
   command -v dircolors >/dev/null 2>&1 && eval "$(dircolors -b)"
   # Fallback (macOS, or unknown TERM): same palette as LSCOLORS above.
-  [[ -n $LS_COLORS ]] || export LS_COLORS='di=1;34:ln=1;36:so=1;37:pi=33:ex=31:bd=34;46:cd=34;43:su=30;41:sg=30;46:tw=30;42:ow=30;43'
+  [[ -n $LS_COLORS ]] || export LS_COLORS='di=1;34:ln=1;36:so=1;37:pi=33:ex=1;37:bd=34;46:cd=34;43:su=30;41:sg=30;46:tw=30;42:ow=30;43'
 fi

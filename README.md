@@ -34,6 +34,11 @@ differences are handled inside the modules, not by separate installs.
   directory. On macOS, if `Alt-C` types `ç` in Ghostty, set `macos-option-as-alt = true`.
 - **eza / bat**: `ls`, `ll`, `la`, `lt` use eza when installed; `cat` is bat with plain style
   (use `command cat` for the real one); `man` pages render through bat.
+- **Colors** follow the [etterglod](https://github.com/ameistad/etterglod.nvim) Neovim theme:
+  bat (and so `cat`, fzf previews and man pages) uses `bat/themes/etterglod.tmTheme`, the
+  command line is highlighted by zsh-syntax-highlighting with the styles in
+  `zsh/modules/zsh-syntax-highlighting/styles.zsh`, and Ghostty loads `ghostty/themes/etterglod`.
+  After editing the tmTheme, run `bat cache --build` (install.sh does this).
 - **History** is shared between sessions, deduplicated, and 50k entries deep.
 - Completion dumps and caches live in `~/.cache/zsh/`. After adding a new completion file,
   run `rm ~/.cache/zsh/zcompdump*` once so it gets picked up.
@@ -170,6 +175,7 @@ Only `zsh` and `git` are required. Everything else is optional and detected at r
 - `fd` (`fd-find`, binary `fdfind`)
 - `bat` (binary `batcat` on Debian/Ubuntu)
 - `eza`
+- `zsh-syntax-highlighting` (sourced at the end of `.zshrc`)
 - `ripgrep` (used by Neovim's picker)
 - `zoxide`, `lazygit`, `gh`
 - A Nerd Font on the desktop machine for Neovim and the terminal configs

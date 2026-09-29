@@ -54,6 +54,20 @@ link_file "$DOTFILES_DIR/zsh/.zshrc" "$HOME/.zshrc"
 echo "Installing neovim configuration..."
 link_file "$DOTFILES_DIR/nvim" "$HOME/.config/nvim"
 
+# Install the bat theme (bat is `batcat` on Debian/Ubuntu). Link only the theme file so a
+# local ~/.config/bat/config keeps working, then rebuild bat's cache so it finds the theme.
+bat_bin="$(command -v bat || command -v batcat || true)"
+bat_config_dir="${bat_bin:+$("$bat_bin" --config-dir 2> /dev/null || true)}"
+if [[ -n "$bat_config_dir" ]]; then
+    echo "Installing bat theme..."
+    link_file "$DOTFILES_DIR/bat/themes/etterglod.tmTheme" "$bat_config_dir/themes/etterglod.tmTheme"
+    "$bat_bin" cache --build > /dev/null || echo "⚠️  bat cache --build failed, run it manually"
+elif [[ -n "$bat_bin" ]]; then
+    echo "⏭️  Skipping bat theme ($bat_bin has no --config-dir, too old)"
+else
+    echo "⏭️  Skipping bat theme (bat not installed)"
+fi
+
 # Terminal emulator configs only make sense on the desktop, not on Linux servers.
 if [[ "$OSTYPE" == darwin* ]]; then
     # Install ghostty
