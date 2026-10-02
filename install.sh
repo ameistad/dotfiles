@@ -7,6 +7,37 @@ echo "🚀 Installing dotfiles..."
 # Get the directory where this script is located
 DOTFILES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 
+configure_login_shell() {
+    local zsh_bin current_shell account_name
+    zsh_bin="$(command -v zsh || true)"
+    if [[ -z "$zsh_bin" ]]; then
+        echo "⚠️  zsh is not installed. Install it, then rerun ./install.sh to set your login shell."
+        return
+    fi
+
+    account_name="$(id -un)"
+    # Read the account setting: $SHELL can be stale after chsh in this session.
+    current_shell="${SHELL:-}"
+    if command -v getent > /dev/null; then
+        current_shell="$(getent passwd "$account_name" | awk -F: '{print $7}')"
+    elif [[ "$OSTYPE" == darwin* ]]; then
+        current_shell="$(dscl . -read "/Users/$account_name" UserShell | awk '{print $2}')"
+    fi
+
+    if [[ "${current_shell##*/}" == zsh ]]; then
+        echo "⏭️  Login shell is already zsh"
+    elif command -v chsh > /dev/null; then
+        echo "🐚 Setting login shell to $zsh_bin (you may be asked for your password)..."
+        if chsh -s "$zsh_bin"; then
+            echo "✅ Login shell set to zsh. Log out and back in for it to take effect."
+        else
+            echo "⚠️  Login shell was not changed. Try manually: chsh -s \"$zsh_bin\""
+        fi
+    else
+        echo "⚠️  chsh is unavailable. Ask an administrator to set your login shell to $zsh_bin."
+    fi
+}
+
 # Function to create symlinks
 link_file() {
     local src="$1"
@@ -124,9 +155,13 @@ if command -v nvim > /dev/null; then
         || echo "⚠️  Neovim plugin sync failed, run :Lazy in neovim to check"
 fi
 
+configure_login_shell
+
 echo "✅ Dotfiles setup complete!"
 echo "📝 Neovim config installed to ~/.config/nvim"
 
 # The installer can't replace its parent shell. Let the user reload it directly
 # so installation doesn't leave an extra shell to exit before disconnecting SSH.
-echo "🔄 To load the new config, run: exec zsh -l"
+if command -v zsh > /dev/null; then
+    echo "🔄 To load the new config in this session, run: exec zsh -l"
+fi

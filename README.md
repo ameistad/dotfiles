@@ -10,6 +10,14 @@ Run the install script:
 ./install.sh
 ```
 
+Run it as your own user. The installer sets your login shell to Zsh with `chsh`
+if it isn't already Zsh; you may be asked for your account password. Log out and
+back in afterward so future SSH sessions start Zsh. To switch the current session
+immediately, run `exec zsh -l`.
+
+If you installed with an older version, run `chsh -s "$(command -v zsh)"` and
+reconnect. Running `exec zsh -l` alone does not change your account's login shell.
+
 ## How it works
 
 ### Zsh Configuration
