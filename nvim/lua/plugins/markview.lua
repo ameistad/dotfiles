@@ -20,6 +20,9 @@ return {
       '<leader>mw',
       function()
         vim.wo.wrap = not vim.wo.wrap
+        -- markview's OptionSet handler ignores wrap changes (it checks buffer 0),
+        -- so redraw explicitly; tables only render when wrap is off.
+        vim.cmd('Markview render')
         print(vim.wo.wrap and 'Wrap enabled' or 'Wrap disabled')
       end,
       desc = 'Toggle wrap (off to render Markview tables)',
