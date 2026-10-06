@@ -6,8 +6,8 @@ return {
       group = vim.api.nvim_create_augroup('markdown_wrap', { clear = true }),
       pattern = { 'markdown', 'quarto', 'rmd' },
       callback = function()
-        -- Prefer comfortable prose editing. Markview keeps most rendering when
-        -- wrapping; tables use a reduced preview to avoid layout glitches.
+        -- Prefer comfortable prose editing. Markview cannot render tables while
+        -- `wrap` is on, so use <leader>mw to toggle it off when a table matters.
         vim.opt_local.wrap = true
       end,
       desc = 'Wrap prose in Markdown-like buffers',
@@ -16,6 +16,14 @@ return {
   keys = {
     { '<leader>mv', '<cmd>Markview toggle<CR>', desc = 'Toggle Markview' },
     { '<leader>ms', '<cmd>Markview splitToggle<CR>', desc = 'Toggle Markview split preview' },
+    {
+      '<leader>mw',
+      function()
+        vim.wo.wrap = not vim.wo.wrap
+        print(vim.wo.wrap and 'Wrap enabled' or 'Wrap disabled')
+      end,
+      desc = 'Toggle wrap (off to render Markview tables)',
+    },
   },
 
   -- Completion for `blink.cmp`
